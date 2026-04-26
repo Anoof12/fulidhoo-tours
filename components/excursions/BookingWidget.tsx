@@ -67,8 +67,8 @@ export function BookingWidget({ excursionId, title, pricePerPerson, maxCapacity 
   const capacityAvailable = Math.max(0, capacityMax - capacityBooked);
 
   return (
-    <div className="space-y-3">
-      <div className="rounded-xl border border-black/5 bg-slate-50 p-3">
+    <div className="space-y-4">
+      <div className="rounded-xl border border-black/5 bg-slate-50 p-4">
         <p className="text-sm font-semibold text-slate-900">
           {capacityAvailable} of {capacityMax} spots available
         </p>
@@ -91,7 +91,7 @@ export function BookingWidget({ excursionId, title, pricePerPerson, maxCapacity 
           type="date"
           value={date}
           onChange={(event) => setDate(event.target.value)}
-          className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+          className="input-base mt-1"
         />
       </label>
       <label className="block text-sm font-medium text-slate-700">
@@ -102,7 +102,7 @@ export function BookingWidget({ excursionId, title, pricePerPerson, maxCapacity 
           max={Math.max(1, capacityAvailable)}
           value={participants}
           onChange={(event) => setParticipants(Number(event.target.value))}
-          className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"
+          className="input-base mt-1"
         />
       </label>
       <button
@@ -118,7 +118,7 @@ export function BookingWidget({ excursionId, title, pricePerPerson, maxCapacity 
           });
           setBookingMessage("Added to cart. Go to checkout to complete your reservation.");
         }}
-        className="w-full rounded-xl bg-primary px-4 py-3 text-sm font-bold text-white transition hover:bg-primary-dark disabled:opacity-60"
+        className="btn-primary w-full py-3 font-bold"
       >
         {capacityAvailable <= 0 ? "Fully Booked" : "Add to Cart"}
       </button>

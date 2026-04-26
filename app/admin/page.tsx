@@ -29,8 +29,8 @@ export default async function AdminDashboardPage() {
   const fullyBooked = utilizationRows.filter((row) => row.percentage >= 100);
 
   return (
-    <div className="space-y-5">
-      <h1 className="text-2xl font-bold text-slate-900">Admin Dashboard</h1>
+    <div className="space-y-6">
+      <h1 className="font-display text-3xl font-bold text-slate-900">Admin Dashboard</h1>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card title="Total Revenue" value={`$${revenue._sum.totalPrice ?? 0}`} />
         <Card title="Total Bookings" value={String(bookings)} />
@@ -38,11 +38,11 @@ export default async function AdminDashboardPage() {
         <Card title="Total Customers" value={String(customers)} />
       </div>
 
-      <div className="rounded-2xl border border-black/5 bg-white p-5">
-        <h2 className="text-lg font-semibold text-slate-900">Capacity Utilization Heatmap</h2>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="surface-card p-6">
+        <h2 className="font-display text-2xl font-semibold text-slate-900">Capacity Utilization</h2>
+        <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {utilizationRows.map((row) => (
-            <div key={row.excursion.id} className="rounded-lg border border-slate-200 p-3">
+            <div key={row.excursion.id} className="rounded-lg border border-slate-200 p-4 transition hover:border-primary/40">
               <p className="text-sm font-semibold text-slate-900">{row.excursion.title}</p>
               <p className="text-xs text-slate-600">
                 {row.booked} / {row.excursion.maxCapacity} booked
@@ -86,7 +86,7 @@ export default async function AdminDashboardPage() {
 
 function Card({ title, value }: { title: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-black/5 bg-white p-5">
+    <div className="surface-card p-5 transition hover:border-primary/30">
       <p className="text-sm font-medium text-slate-500">{title}</p>
       <p className="mt-2 text-2xl font-bold text-slate-900">{value}</p>
     </div>

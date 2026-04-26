@@ -29,6 +29,49 @@ async function main() {
     },
   });
 
+  const customerNames = [
+    "Aisha",
+    "Ibrahim",
+    "Zara",
+    "Hassan",
+    "Maya",
+    "Imran",
+    "Leena",
+    "Nashid",
+    "Sara",
+    "Yameen",
+    "Nadia",
+    "Ali",
+    "Shifa",
+    "Riyaz",
+    "Liyana",
+    "Aslam",
+    "Nifal",
+    "Hiba",
+    "Adam",
+    "Aminath",
+  ];
+
+  const customers: Awaited<ReturnType<typeof prisma.user.upsert>>[] = [];
+  for (let index = 0; index < customerNames.length; index += 1) {
+    const name = customerNames[index];
+    const seededUser = await prisma.user.upsert({
+      where: { email: `demo${index + 1}@example.com` },
+      update: { name },
+      create: {
+        email: `demo${index + 1}@example.com`,
+        password: customerPassword,
+        role: Role.CUSTOMER,
+        name,
+        phone: `+960700${String(index + 1).padStart(4, "0")}`,
+        country: index % 2 === 0 ? "Maldives" : "Sri Lanka",
+      },
+    });
+    customers.push(seededUser);
+  }
+
+  const allCustomers = [customer, ...customers];
+
   const excursions = [
     {
       title: "Shark Point Snorkeling",
@@ -38,6 +81,11 @@ async function main() {
       maxCapacity: 8,
       pricePerPerson: 50,
       difficulty: "MODERATE",
+      meetingPoint: "Fulidhoo Main Jetty",
+      included: ["Guide", "Snorkeling gear", "Water", "Safety briefing"],
+      excluded: ["Personal expenses", "Tips"],
+      image:
+        "https://images.unsplash.com/photo-1551244072-5d12893278ab?auto=format&fit=crop&w=1200&q=80",
     },
     {
       title: "Stingray Beach Experience",
@@ -47,6 +95,11 @@ async function main() {
       maxCapacity: 12,
       pricePerPerson: 25,
       difficulty: "EASY",
+      meetingPoint: "Beachside Dock",
+      included: ["Guide", "Water", "Snorkel mask"],
+      excluded: ["Hotel transfer"],
+      image:
+        "https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?auto=format&fit=crop&w=1200&q=80",
     },
     {
       title: "Sunset Cruise",
@@ -56,8 +109,85 @@ async function main() {
       maxCapacity: 15,
       pricePerPerson: 45,
       difficulty: "EASY",
+      meetingPoint: "Harbor Pier",
+      included: ["Boat ride", "Refreshments", "Guide"],
+      excluded: ["Private pickup"],
+      image:
+        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
+    },
+    {
+      title: "Night Fishing Adventure",
+      slug: "night-fishing-adventure",
+      category: "FISHING",
+      duration: 210,
+      maxCapacity: 10,
+      pricePerPerson: 55,
+      difficulty: "MODERATE",
+      meetingPoint: "Fulidhoo Main Jetty",
+      included: ["Fishing gear", "Guide", "Bait", "Water"],
+      excluded: ["Meal"],
+      image:
+        "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=80",
+    },
+    {
+      title: "Turtle Reef Discovery",
+      slug: "turtle-reef-discovery",
+      category: "SNORKELING",
+      duration: 150,
+      maxCapacity: 9,
+      pricePerPerson: 40,
+      difficulty: "EASY",
+      meetingPoint: "Turtle Point Dock",
+      included: ["Guide", "Snorkeling gear", "Water"],
+      excluded: ["GoPro rental"],
+      image:
+        "https://images.unsplash.com/photo-1560275619-4662e36fa65c?auto=format&fit=crop&w=1200&q=80",
+    },
+    {
+      title: "Sandbank Picnic Escape",
+      slug: "sandbank-picnic-escape",
+      category: "ISLAND_EXPERIENCE",
+      duration: 240,
+      maxCapacity: 14,
+      pricePerPerson: 60,
+      difficulty: "EASY",
+      meetingPoint: "Harbor Pier",
+      included: ["Boat transfer", "Picnic setup", "Guide", "Water"],
+      excluded: ["Professional photos"],
+      image:
+        "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=80",
+    },
+    {
+      title: "Beginners Scuba Intro",
+      slug: "beginners-scuba-intro",
+      category: "DIVING",
+      duration: 180,
+      maxCapacity: 6,
+      pricePerPerson: 95,
+      difficulty: "CHALLENGING",
+      meetingPoint: "Dive Center Front Desk",
+      included: ["Instructor", "Dive gear", "Tank", "Safety briefing"],
+      excluded: ["Certification fee"],
+      image:
+        "https://images.unsplash.com/photo-1525715843408-5c6ec44598f6?auto=format&fit=crop&w=1200&q=80",
+    },
+    {
+      title: "Cultural Island Walk",
+      slug: "cultural-island-walk",
+      category: "CULTURAL",
+      duration: 90,
+      maxCapacity: 18,
+      pricePerPerson: 20,
+      difficulty: "EASY",
+      meetingPoint: "Island Square",
+      included: ["Local guide", "Tea stop"],
+      excluded: ["Souvenirs"],
+      image:
+        "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80",
     },
   ] as const;
+
+  const excursionRecords: Array<{ id: string; slug: string; maxCapacity: number; pricePerPerson: number }> = [];
 
   for (const excursion of excursions) {
     const created = await prisma.excursion.upsert({
@@ -70,9 +200,9 @@ async function main() {
         duration: excursion.duration,
         maxCapacity: excursion.maxCapacity,
         pricePerPerson: excursion.pricePerPerson,
-        included: ["Guide", "Safety briefing", "Water"],
-        excluded: ["Personal expenses", "Tips"],
-        meetingPoint: "Fulidhoo Main Jetty",
+        included: [...excursion.included],
+        excluded: [...excursion.excluded],
+        meetingPoint: excursion.meetingPoint,
         difficulty: excursion.difficulty,
       },
       create: {
@@ -84,9 +214,9 @@ async function main() {
         duration: excursion.duration,
         maxCapacity: excursion.maxCapacity,
         pricePerPerson: excursion.pricePerPerson,
-        included: ["Guide", "Safety briefing", "Water"],
-        excluded: ["Personal expenses", "Tips"],
-        meetingPoint: "Fulidhoo Main Jetty",
+        included: [...excursion.included],
+        excluded: [...excursion.excluded],
+        meetingPoint: excursion.meetingPoint,
         difficulty: excursion.difficulty,
       },
     });
@@ -97,46 +227,114 @@ async function main() {
     await prisma.excursionImage.create({
       data: {
         excursionId: created.id,
-        url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
+        url: excursion.image,
         altText: created.title,
         isPrimary: true,
+        order: 0,
+      },
+    });
+    await prisma.excursionImage.create({
+      data: {
+        excursionId: created.id,
+        url: "https://images.unsplash.com/photo-1483683804023-6ccdb62f86ef?auto=format&fit=crop&w=1200&q=80",
+        altText: `${created.title} alternate`,
+        isPrimary: false,
         order: 1,
+      },
+    });
+
+    excursionRecords.push({
+      id: created.id,
+      slug: created.slug,
+      maxCapacity: excursion.maxCapacity,
+      pricePerPerson: excursion.pricePerPerson,
+    });
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  for (let i = 0; i < 140; i += 1) {
+    const selectedUser = allCustomers[i % allCustomers.length];
+    const excursion = excursionRecords[i % excursionRecords.length];
+    const participants = (i % 4) + 1;
+    const offsetDays = (i % 70) - 15;
+    const bookingDate = new Date(today);
+    bookingDate.setDate(today.getDate() + offsetDays);
+    bookingDate.setHours(9 + (i % 5), 0, 0, 0);
+
+    const status =
+      offsetDays < -2
+        ? "COMPLETED"
+        : i % 9 === 0
+          ? "CANCELLED"
+          : i % 3 === 0
+            ? "PENDING"
+            : "CONFIRMED";
+    const paymentStatus =
+      status === "CANCELLED"
+        ? "REFUNDED"
+        : status === "COMPLETED" || i % 5 === 0
+          ? "PAID"
+          : "UNPAID";
+
+    await prisma.booking.upsert({
+      where: { bookingNumber: `DEMO-BK-${String(i + 1).padStart(4, "0")}` },
+      update: {
+        userId: selectedUser.id,
+        excursionId: excursion.id,
+        bookingDate,
+        participants,
+        totalPrice: participants * excursion.pricePerPerson,
+        status,
+        paymentStatus,
+        customerName: selectedUser.name ?? `Customer ${i + 1}`,
+        customerEmail: selectedUser.email,
+        customerPhone: selectedUser.phone ?? "+9609000000",
+        specialRequests:
+          i % 7 === 0 ? "Please arrange vegetarian snacks and shaded seating if possible." : null,
+      },
+      create: {
+        bookingNumber: `DEMO-BK-${String(i + 1).padStart(4, "0")}`,
+        userId: selectedUser.id,
+        excursionId: excursion.id,
+        bookingDate,
+        participants,
+        totalPrice: participants * excursion.pricePerPerson,
+        status,
+        paymentStatus,
+        customerName: selectedUser.name ?? `Customer ${i + 1}`,
+        customerEmail: selectedUser.email,
+        customerPhone: selectedUser.phone ?? "+9609000000",
+        specialRequests:
+          i % 7 === 0 ? "Please arrange vegetarian snacks and shaded seating if possible." : null,
       },
     });
   }
 
-  const sharkExcursion = await prisma.excursion.findUniqueOrThrow({
-    where: { slug: "shark-point-snorkeling" },
-  });
+  for (let i = 0; i < 45; i += 1) {
+    const selectedUser = allCustomers[i % allCustomers.length];
+    const excursion = excursionRecords[i % excursionRecords.length];
+    const rating = (i % 5) + 1;
+    const comment = [
+      "Amazing experience with friendly guides.",
+      "Well organized and suitable for families.",
+      "Great value and memorable trip.",
+      "Would definitely book again.",
+      "Beautiful spots and smooth logistics.",
+    ][i % 5];
 
-  await prisma.booking.upsert({
-    where: { bookingNumber: "DEMO-BK-0001" },
-    update: {
-      userId: customer.id,
-      excursionId: sharkExcursion.id,
-      bookingDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-      participants: 2,
-      totalPrice: 100,
-      status: "CONFIRMED",
-      paymentStatus: "PAID",
-      customerName: "Demo Customer",
-      customerEmail: customer.email,
-      customerPhone: "+9609000000",
-    },
-    create: {
-      bookingNumber: "DEMO-BK-0001",
-      userId: customer.id,
-      excursionId: sharkExcursion.id,
-      bookingDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-      participants: 2,
-      totalPrice: 100,
-      status: "CONFIRMED",
-      paymentStatus: "PAID",
-      customerName: "Demo Customer",
-      customerEmail: customer.email,
-      customerPhone: "+9609000000",
-    },
-  });
+    await prisma.review.upsert({
+      where: { excursionId_userId: { excursionId: excursion.id, userId: selectedUser.id } },
+      update: { rating, comment },
+      create: {
+        excursionId: excursion.id,
+        userId: selectedUser.id,
+        rating,
+        comment,
+      },
+    });
+  }
 
   await prisma.settings.upsert({
     where: { id: "default-settings" },
@@ -151,7 +349,13 @@ async function main() {
     },
   });
 
-  console.log("Seed completed", { admin: admin.email, customer: customer.email });
+  console.log("Seed completed", {
+    admin: admin.email,
+    totalCustomers: allCustomers.length,
+    totalExcursions: excursionRecords.length,
+    totalBookingsSeeded: 140,
+    totalReviewsSeeded: 45,
+  });
 }
 
 main()

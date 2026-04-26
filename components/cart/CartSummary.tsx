@@ -53,14 +53,14 @@ export function CartSummary() {
   }
 
   return (
-    <div className="rounded-2xl border border-black/5 bg-white p-5">
-      <h2 className="mb-4 text-lg font-semibold text-slate-900">Your Cart</h2>
+    <div className="surface-card space-y-4 p-6">
+      <h2 className="text-lg font-semibold text-slate-900">Your Cart</h2>
       {items.length === 0 ? (
         <p className="text-sm text-slate-600">Cart is empty.</p>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {items.map((item) => (
-            <div key={item.itemId} className="rounded-lg bg-slate-50 p-3 text-sm text-slate-700">
+            <div key={item.itemId} className="rounded-lg bg-slate-50 p-4 text-sm text-slate-700">
               <p className="font-semibold text-slate-900">{item.title}</p>
               <p>{item.date}</p>
               <p>
@@ -68,7 +68,7 @@ export function CartSummary() {
               </p>
               <button
                 type="button"
-                className="mt-2 text-xs font-semibold text-red-600"
+                className="btn-danger mt-3 px-2 py-1 text-xs"
                 onClick={() => removeFromCart(item.itemId)}
               >
                 Remove
@@ -84,26 +84,26 @@ export function CartSummary() {
               placeholder="Full name"
               value={customerName}
               onChange={(event) => setCustomerName(event.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+              className="input-base"
             />
             <input
               type="email"
               placeholder="Email"
               value={customerEmail}
               onChange={(event) => setCustomerEmail(event.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+              className="input-base"
             />
             <input
               placeholder="Phone number"
               value={customerPhone}
               onChange={(event) => setCustomerPhone(event.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+              className="input-base"
             />
             <textarea
               placeholder="Special requests (optional)"
               value={specialRequests}
               onChange={(event) => setSpecialRequests(event.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+              className="input-base"
             />
           </div>
           <button
@@ -112,7 +112,7 @@ export function CartSummary() {
               isSubmitting || !customerName || !customerEmail || !customerPhone || items.length === 0
             }
             onClick={handleReserve}
-            className="inline-flex rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white disabled:opacity-60"
+            className="btn-primary"
           >
             {isSubmitting ? "Reserving..." : "Reserve Booking"}
           </button>
@@ -139,7 +139,7 @@ export function CartSummary() {
               View my bookings
             </Link>
           ) : null}
-          <Link href="/excursions" className="block text-sm font-semibold text-primary">
+          <Link href="/excursions" className="block text-sm font-semibold text-primary hover:underline">
             Continue browsing excursions
           </Link>
         </div>

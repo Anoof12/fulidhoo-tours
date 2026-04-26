@@ -35,11 +35,11 @@ export function BookingStatusControl({ bookingId, currentStatus }: BookingStatus
   }
 
   return (
-    <div className="mt-2 flex items-center gap-2">
+    <div className="mt-3 flex flex-wrap items-center gap-2">
       <select
         value={status}
         onChange={(event) => setStatus(event.target.value as BookingStatus)}
-        className="rounded-md border border-slate-300 px-2 py-1 text-xs"
+        className="min-h-10 rounded-md border border-slate-300 px-2 py-2 text-xs"
       >
         {options.map((option) => (
           <option key={option} value={option}>
@@ -51,7 +51,7 @@ export function BookingStatusControl({ bookingId, currentStatus }: BookingStatus
         type="button"
         onClick={handleUpdate}
         disabled={isSaving}
-        className="rounded-md bg-slate-800 px-2 py-1 text-xs font-semibold text-white disabled:opacity-60"
+        className="min-h-10 rounded-md bg-slate-800 px-3 py-2 text-xs font-semibold text-white transition hover:bg-slate-700 disabled:opacity-60"
       >
         {isSaving ? "Saving..." : "Update"}
       </button>
