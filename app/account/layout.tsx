@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/lib/auth";
 const items = [
   { href: "/account/dashboard", label: "Dashboard" },
   { href: "/account/bookings", label: "My Bookings" },
+  { href: "/account/favorites", label: "Favorites" },
   { href: "/account/profile", label: "Profile" },
 ];
 

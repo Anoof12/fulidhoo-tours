@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BookingCountdown } from "@/components/booking/BookingCountdown";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
@@ -36,6 +37,7 @@ export default async function AccountDashboardPage() {
         <Card title="Completed Trips" value={String(completed)} />
         <Card title="Total Spent" value={`$${totalSpent._sum.totalPrice ?? 0}`} />
       </div>
+      <BookingCountdown minutes={30} label="Next booking confirmation window" />
 
       <div className="rounded-2xl border border-black/5 bg-white p-5">
         <div className="mb-4 flex items-center justify-between">

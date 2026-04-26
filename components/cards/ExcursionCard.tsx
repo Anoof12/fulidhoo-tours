@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CapacityBar } from "@/components/excursions/CapacityBar";
+import { FavoriteButton } from "@/components/excursions/FavoriteButton";
 import { Excursion } from "@/types/excursion";
 
 type ExcursionCardProps = {
@@ -18,7 +19,7 @@ export function ExcursionCard({
   const percentage = Math.round((safeBooked / Math.max(1, excursion.maxCapacity)) * 100);
 
   return (
-    <article className="overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+    <article className="surface-card interactive-card overflow-hidden shadow-sm">
       <div className="relative h-52 w-full">
         <Image
           src={excursion.image}
@@ -34,7 +35,10 @@ export function ExcursionCard({
           <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
             {excursion.category}
           </span>
-          <span className="text-xs font-medium text-slate-600">{excursion.difficulty}</span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-medium text-slate-600">{excursion.difficulty}</span>
+            <FavoriteButton excursionId={excursion.id} />
+          </div>
         </div>
         {showAvailabilityBadge ? <CapacityBar current={safeBooked} max={excursion.maxCapacity} variant="badge" /> : null}
         {percentage > 90 ? (
@@ -64,7 +68,7 @@ export function ExcursionCard({
 
         <Link
           href={`/excursions/${excursion.slug}`}
-          className="inline-flex w-full items-center justify-center rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary-dark"
+          className="btn-primary w-full"
         >
           View Details
         </Link>

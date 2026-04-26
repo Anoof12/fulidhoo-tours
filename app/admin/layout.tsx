@@ -6,6 +6,7 @@ const items = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/excursions", label: "Excursions" },
   { href: "/admin/bookings", label: "Bookings" },
+  { href: "/admin/calendar", label: "Calendar" },
 ];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -15,15 +16,16 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   return (
-    <div className="mx-auto grid w-full max-w-6xl gap-6 px-4 py-10 sm:px-6 md:grid-cols-[230px_1fr]">
-      <aside className="h-fit rounded-2xl border border-black/5 bg-white p-4">
-        <p className="mb-3 text-sm font-semibold text-slate-500">Admin Panel</p>
-        <nav className="space-y-2">
+    <div className="mx-auto grid w-full max-w-6xl gap-4 px-4 py-6 sm:gap-6 sm:px-6 sm:py-10 md:grid-cols-[250px_1fr]">
+      <aside className="surface-card h-fit p-3 sm:p-4">
+        <p className="font-display mb-1 text-xl font-semibold text-slate-900">Admin</p>
+        <p className="mb-3 text-xs text-slate-500">Operations Console</p>
+        <nav className="grid grid-cols-2 gap-2 md:grid-cols-1">
           {items.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
+              className="block rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-100 hover:text-primary"
             >
               {item.label}
             </Link>

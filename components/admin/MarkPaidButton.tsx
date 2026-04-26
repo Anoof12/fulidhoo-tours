@@ -34,7 +34,7 @@ export function MarkPaidButton({ bookingId }: MarkPaidButtonProps) {
         type="button"
         disabled={isLoading}
         onClick={handleMarkPaid}
-        className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+        className="min-h-10 rounded-lg bg-emerald-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-60"
       >
         {isLoading ? "Updating..." : "Mark as Paid On Site"}
       </button>
