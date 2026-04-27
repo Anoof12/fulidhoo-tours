@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ExcursionCard } from "@/components/cards/ExcursionCard";
 import { RecentlyViewed } from "@/components/excursions/RecentlyViewed";
 import { mapPrismaExcursionToView } from "@/lib/excursionMapper";
@@ -91,6 +92,59 @@ export default async function Home() {
               <p className="mt-3 text-sm leading-relaxed text-slate-600">{item.text}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="bg-[#14532d] py-16 text-white">
+        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+          <div className="mb-10 text-center">
+            <p className="text-xs font-semibold uppercase tracking-widest text-emerald-200">
+              Testimonials
+            </p>
+            <h2 className="font-display mt-3 text-4xl font-bold">What Our Travelers Say</h2>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {[
+              {
+                quote:
+                  '"The mountain trek in Patagonia was life-changing. Our guide knew every hidden waterfall and viewpoint. Absolutely incredible experience!"',
+                name: "Sarah Mitchell",
+                trip: "Patagonia Trek",
+                avatar: "http://static.photos/people/200x200/11",
+              },
+              {
+                quote:
+                  '"Snorkeling in the Maldives exceeded all expectations. The marine life was spectacular and the team ensured everything was perfect."',
+                name: "James Rodriguez",
+                trip: "Maldives Snorkeling",
+                avatar: "http://static.photos/people/200x200/22",
+              },
+              {
+                quote:
+                  '"The cultural tour of Kyoto was magical. From temples to tea ceremonies, every moment was thoughtfully curated. Highly recommend!"',
+                name: "Emma Chen",
+                trip: "Kyoto Cultural Tour",
+                avatar: "http://static.photos/people/200x200/33",
+              },
+            ].map((item) => (
+              <article key={item.name} className="rounded-3xl bg-white/10 p-8 backdrop-blur-sm">
+                <p className="text-2xl leading-relaxed text-white/85">{item.quote}</p>
+                <div className="mt-8 flex items-center gap-3">
+                  <Image
+                    src={item.avatar}
+                    alt={item.name}
+                    className="h-14 w-14 rounded-full object-cover"
+                    width={56}
+                    height={56}
+                  />
+                  <div>
+                    <p className="text-2xl font-semibold leading-tight text-white">{item.name}</p>
+                    <p className="text-xl text-white/60">{item.trip}</p>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
       <RecentlyViewed />
