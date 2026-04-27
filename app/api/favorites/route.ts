@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { hasCustomerPortalAccess } from "@/lib/roles";
 
 export async function GET() {
   const user = await getCurrentUser();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  if (!hasCustomerPortalAccess(user.role)) {
+    return NextResponse.json({ error: "Only customer accounts can access favorites." }, { status: 403 });
   }
 
   const favorites = await prisma.favorite.findMany({
@@ -25,6 +29,9 @@ export async function POST(request: Request) {
   const user = await getCurrentUser();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  if (!hasCustomerPortalAccess(user.role)) {
+    return NextResponse.json({ error: "Only customer accounts can access favorites." }, { status: 403 });
   }
 
   const body = (await request.json()) as { excursionId?: string };
@@ -50,6 +57,9 @@ export async function DELETE(request: Request) {
   const user = await getCurrentUser();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  if (!hasCustomerPortalAccess(user.role)) {
+    return NextResponse.json({ error: "Only customer accounts can access favorites." }, { status: 403 });
   }
 
   const { searchParams } = new URL(request.url);

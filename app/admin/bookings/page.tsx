@@ -85,7 +85,7 @@ export default async function AdminBookingsPage({
   const exportHref = `/api/admin/bookings/export?${query.toString()}`;
 
   return (
-    <div className="surface-card space-y-4 p-4 sm:p-5">
+    <div className="space-y-4 rounded-3xl border border-black/5 bg-white p-4 shadow-sm sm:p-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="font-display text-2xl font-bold text-slate-900 sm:text-3xl">Manage Bookings</h1>
         <a
@@ -95,7 +95,7 @@ export default async function AdminBookingsPage({
           Export CSV
         </a>
       </div>
-      <form className="grid gap-2 rounded-lg bg-slate-50 p-3 text-sm md:grid-cols-4">
+      <form className="grid gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm md:grid-cols-4">
         <input name="q" placeholder="Search booking/customer/email" defaultValue={params.q} className="input-base md:col-span-2" />
         <input name="from" type="date" defaultValue={params.from} className="input-base" />
         <input name="to" type="date" defaultValue={params.to} className="input-base" />
@@ -150,7 +150,7 @@ export default async function AdminBookingsPage({
         {bookings.map((booking) => (
           <div
             key={booking.id}
-            className="rounded-lg bg-slate-50 p-4 text-sm text-slate-700 transition hover:border hover:border-primary/30"
+            className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700 transition hover:border-primary/30"
           >
             <p className="font-semibold text-slate-900">
               {booking.bookingNumber} - {booking.excursion.title}

@@ -30,7 +30,10 @@ export default async function AccountDashboardPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-slate-900">Welcome, {user?.name ?? "Guest"}</h1>
+      <div className="rounded-3xl border border-black/5 bg-white p-6 shadow-sm">
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">Dashboard</p>
+        <h1 className="mt-2 text-2xl font-bold text-slate-900">Welcome, {user?.name ?? "Guest"}</h1>
+      </div>
 
       <div className="grid gap-4 md:grid-cols-3">
         <Card title="Upcoming Bookings" value={String(upcoming)} />
@@ -39,7 +42,7 @@ export default async function AccountDashboardPage() {
       </div>
       <BookingCountdown minutes={30} label="Next booking confirmation window" />
 
-      <div className="rounded-2xl border border-black/5 bg-white p-5">
+      <div className="rounded-3xl border border-black/5 bg-white p-5 shadow-sm">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-slate-900">Upcoming Excursions</h2>
           <Link href="/account/bookings" className="text-sm font-semibold text-primary">
@@ -65,7 +68,7 @@ export default async function AccountDashboardPage() {
 
 function Card({ title, value }: { title: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-black/5 bg-white p-5">
+    <div className="rounded-3xl border border-black/5 bg-white p-5 shadow-sm">
       <p className="text-sm font-medium text-slate-500">{title}</p>
       <p className="mt-2 text-2xl font-bold text-slate-900">{value}</p>
     </div>

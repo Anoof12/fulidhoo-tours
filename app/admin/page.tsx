@@ -32,7 +32,10 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-3xl font-bold text-slate-900">Admin Dashboard</h1>
+      <div className="rounded-3xl border border-black/5 bg-white p-6 shadow-sm">
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">Overview</p>
+        <h1 className="font-display mt-2 text-3xl font-bold text-slate-900">Admin Dashboard</h1>
+      </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card title="Total Revenue" value={`$${revenue._sum.totalPrice ?? 0}`} />
         <Card title="Total Bookings" value={String(bookings)} />
@@ -40,7 +43,7 @@ export default async function AdminDashboardPage() {
         <Card title="Total Customers" value={String(customers)} />
       </div>
 
-      <div className="surface-card p-6">
+      <div className="rounded-3xl border border-black/5 bg-white p-6 shadow-sm">
         <h2 className="font-display text-2xl font-semibold text-slate-900">Capacity Utilization</h2>
         <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {utilizationRows.map((row) => (
@@ -88,7 +91,7 @@ export default async function AdminDashboardPage() {
 
 function Card({ title, value }: { title: string; value: string }) {
   return (
-    <div className="surface-card p-5 transition hover:border-primary/30">
+    <div className="rounded-3xl border border-black/5 bg-white p-5 shadow-sm transition hover:border-primary/30">
       <p className="text-sm font-medium text-slate-500">{title}</p>
       <p className="mt-2 text-2xl font-bold text-slate-900">{value}</p>
     </div>

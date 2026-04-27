@@ -61,9 +61,9 @@ export default async function AdminCalendarPage({
   const monthValue = `${start.getFullYear()}-${String(start.getMonth() + 1).padStart(2, "0")}`;
 
   return (
-    <div className="surface-card space-y-4 p-4 sm:p-5">
+    <div className="space-y-4 rounded-3xl border border-black/5 bg-white p-4 shadow-sm sm:p-5">
       <h1 className="font-display text-2xl font-bold text-slate-900 sm:text-3xl">Booking Calendar</h1>
-      <form className="grid gap-2 rounded-lg bg-slate-50 p-3 text-sm md:grid-cols-3">
+      <form className="grid gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm md:grid-cols-3">
         <input name="month" type="month" defaultValue={monthValue} className="input-base" />
         <select name="excursionId" defaultValue={selectedExcursionId} className="input-base">
           <option value="">All excursions</option>
@@ -86,7 +86,7 @@ export default async function AdminCalendarPage({
             const percentage = Math.round((info.totalParticipants / Math.max(1, info.maxCapacity)) * 100);
             const isFull = percentage >= 100;
             return (
-              <div key={date} className="rounded-lg border border-slate-200 p-4 transition hover:border-primary/30">
+              <div key={date} className="rounded-2xl border border-slate-200 p-4 transition hover:border-primary/30">
                 <div className="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
                   <p className="font-semibold text-slate-900">{date}</p>
                   <p className={`text-xs font-semibold ${isFull ? "text-red-700" : "text-slate-700"}`}>

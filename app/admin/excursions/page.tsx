@@ -8,7 +8,7 @@ export default async function AdminExcursionsPage() {
   const excursions = await prisma.excursion.findMany({ orderBy: { createdAt: "desc" } });
 
   return (
-    <div className="surface-card p-5">
+    <div className="rounded-3xl border border-black/5 bg-white p-5 shadow-sm">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="font-display text-3xl font-bold text-slate-900">Manage Excursions</h1>
         <Link
@@ -22,7 +22,7 @@ export default async function AdminExcursionsPage() {
         {excursions.map((excursion) => (
           <div
             key={excursion.id}
-            className="rounded-lg bg-slate-50 p-4 text-sm text-slate-700 transition hover:border hover:border-primary/30"
+            className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700 transition hover:border-primary/30"
           >
             <p className="font-semibold text-slate-900">
               {excursion.title} - ${excursion.pricePerPerson.toString()}
