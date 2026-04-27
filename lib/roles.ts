@@ -15,3 +15,7 @@ export function hasAdminPanelAccess(role: Role | string | undefined): boolean {
   if (!role) return false;
   return ADMIN_PANEL_ROLES.includes(role as Role);
 }
+
+export function hasCustomerPortalAccess(role: Role | string | undefined): boolean {
+  return role === Role.CUSTOMER;
+}

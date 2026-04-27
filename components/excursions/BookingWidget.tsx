@@ -10,6 +10,8 @@ type BookingWidgetProps = {
   title: string;
   pricePerPerson: number;
   maxCapacity: number;
+  initialDate?: string;
+  initialParticipants?: number;
 };
 
 type CapacityData = {
@@ -20,9 +22,16 @@ type CapacityData = {
   status: "available" | "filling_up" | "almost_full" | "fully_booked";
 };
 
-export function BookingWidget({ excursionId, title, pricePerPerson, maxCapacity }: BookingWidgetProps) {
-  const [date, setDate] = useState("");
-  const [participants, setParticipants] = useState(1);
+export function BookingWidget({
+  excursionId,
+  title,
+  pricePerPerson,
+  maxCapacity,
+  initialDate = "",
+  initialParticipants = 1,
+}: BookingWidgetProps) {
+  const [date, setDate] = useState(initialDate);
+  const [participants, setParticipants] = useState(Math.max(1, initialParticipants));
   const [capacity, setCapacity] = useState<CapacityData | null>(null);
   const [liveNotice, setLiveNotice] = useState("");
   const [screenReaderNotice, setScreenReaderNotice] = useState("");

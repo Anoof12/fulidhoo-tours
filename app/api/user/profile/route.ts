@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { hasCustomerPortalAccess } from "@/lib/roles";
 
 const updateSchema = z.object({
   name: z.string().min(2).optional(),
@@ -12,6 +13,9 @@ const updateSchema = z.object({
 export async function GET() {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!hasCustomerPortalAccess(user.role)) {
+    return NextResponse.json({ error: "Only customer accounts can access this endpoint." }, { status: 403 });
+  }
 
   const profile = await prisma.user.findUnique({
     where: { id: user.id },
@@ -23,6 +27,9 @@ export async function GET() {
 export async function PUT(request: Request) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!hasCustomerPortalAccess(user.role)) {
+    return NextResponse.json({ error: "Only customer accounts can access this endpoint." }, { status: 403 });
+  }
 
   const body = await request.json();
   const data = updateSchema.parse(body);

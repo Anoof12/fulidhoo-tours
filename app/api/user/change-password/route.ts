@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { hasCustomerPortalAccess } from "@/lib/roles";
 
 const schema = z.object({
   currentPassword: z.string().min(1),
@@ -16,6 +17,9 @@ const schema = z.object({
 export async function POST(request: Request) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!hasCustomerPortalAccess(user.role)) {
+    return NextResponse.json({ error: "Only customer accounts can access this endpoint." }, { status: 403 });
+  }
 
   const body = await request.json();
   const parsed = schema.parse(body);

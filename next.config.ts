@@ -1,6 +1,15 @@
 import type { NextConfig } from "next";
 
+const allowedDevOrigins = (
+  process.env.ALLOWED_DEV_ORIGINS ??
+  "localhost,127.0.0.1,172.20.3.149"
+)
+  .split(",")
+  .map((value) => value.trim())
+  .filter(Boolean);
+
 const nextConfig: NextConfig = {
+  allowedDevOrigins,
   turbopack: {
     // Prevent workspace-root mis-detection when parent folders also have lockfiles.
     root: process.cwd(),

@@ -10,10 +10,12 @@ import { prisma } from "@/lib/prisma";
 
 type ExcursionDetailPageProps = {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ date?: string; participants?: string }>;
 };
 
-export default async function ExcursionDetailPage({ params }: ExcursionDetailPageProps) {
+export default async function ExcursionDetailPage({ params, searchParams }: ExcursionDetailPageProps) {
   const { slug } = await params;
+  const query = await searchParams;
   const user = await getCurrentUser();
   const dbExcursion = await prisma.excursion.findUnique({
     where: { slug },
@@ -46,6 +48,13 @@ export default async function ExcursionDetailPage({ params }: ExcursionDetailPag
         }),
       )
     : false;
+
+  const prefillDate = query.date && /^\d{4}-\d{2}-\d{2}$/.test(query.date) ? query.date : undefined;
+  const participantsValue = Number(query.participants ?? "1");
+  const prefillParticipants =
+    Number.isFinite(participantsValue) && participantsValue >= 1
+      ? Math.min(excursion.maxCapacity, Math.floor(participantsValue))
+      : 1;
 
   return (
     <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1.45fr_1fr]">
@@ -150,6 +159,8 @@ export default async function ExcursionDetailPage({ params }: ExcursionDetailPag
             title={excursion.title}
             pricePerPerson={excursion.pricePerPerson}
             maxCapacity={excursion.maxCapacity}
+            initialDate={prefillDate}
+            initialParticipants={prefillParticipants}
           />
         </div>
         <p className="mt-3 text-center text-xs text-slate-500">

@@ -21,11 +21,12 @@ async function login(page: import("@playwright/test").Page, email: string, passw
 }
 
 test.describe("Auth gate", () => {
-  test("anonymous visit to home redirects to login", async ({ browser }) => {
+  test("anonymous visit to home stays public", async ({ browser }) => {
     const ctx = await browser.newContext();
     const page = await ctx.newPage();
     await page.goto("/");
-    await expect(page).toHaveURL(/\/login/);
+    await expect(page).toHaveURL("/");
+    await expect(page.getByRole("heading", { name: /fulidhoo tours/i })).toBeVisible();
     await ctx.close();
   });
 });
@@ -34,7 +35,7 @@ test.describe("Customer flows", () => {
   test("login lands on homepage", async ({ page }) => {
     await login(page, CUSTOMER_EMAIL, CUSTOMER_PASSWORD);
     await expect(page).toHaveURL("/");
-    await expect(page.getByRole("heading", { name: /explore the island/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /fulidhoo tours/i })).toBeVisible();
   });
 
   test("excursions listing loads", async ({ page }) => {

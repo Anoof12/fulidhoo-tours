@@ -1,6 +1,6 @@
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
-import { hasAdminPanelAccess } from "@/lib/roles";
+import { hasAdminPanelAccess, hasCustomerPortalAccess } from "@/lib/roles";
 
 function isPublicAuthPath(pathname: string): boolean {
   return (
@@ -10,6 +10,15 @@ function isPublicAuthPath(pathname: string): boolean {
     pathname.startsWith("/register/") ||
     pathname === "/logout" ||
     pathname.startsWith("/logout/")
+  );
+}
+
+function isProtectedPath(pathname: string): boolean {
+  return (
+    pathname.startsWith("/account") ||
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/checkout") ||
+    pathname.startsWith("/logout")
   );
 }
 
@@ -26,7 +35,12 @@ export default withAuth(
 
     const isAdminRoute = path.startsWith("/admin");
     if (isAdminRoute && role && !hasAdminPanelAccess(role)) {
-      return NextResponse.redirect(new URL("/", req.url));
+      return NextResponse.redirect(new URL("/access-denied?area=admin", req.url));
+    }
+
+    const isCustomerRoute = path.startsWith("/account");
+    if (isCustomerRoute && role && !hasCustomerPortalAccess(role)) {
+      return NextResponse.redirect(new URL("/access-denied?area=customer", req.url));
     }
 
     return NextResponse.next();
@@ -36,7 +50,8 @@ export default withAuth(
       authorized: ({ token, req }) => {
         const path = req.nextUrl.pathname;
         if (isPublicAuthPath(path)) return true;
-        return !!token;
+        if (isProtectedPath(path)) return !!token;
+        return true;
       },
     },
   },
