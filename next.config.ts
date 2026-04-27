@@ -29,7 +29,6 @@ const nextConfig: NextConfig = {
   },
   env: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL || "http://localhost:3000",
-    STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
     CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
   },
   async headers() {
