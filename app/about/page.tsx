@@ -1,3 +1,5 @@
+import { HeroBanner } from "@/components/common/HeroBanner";
+
 export const metadata = {
   title: "About Fulidhoo | Fulidhoo Tours",
   description: "Learn why V. Fulidhoo is one of the best local islands for ocean experiences.",
@@ -6,25 +8,14 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <div className="pb-14">
-      <section className="relative -mt-20 overflow-hidden py-28 sm:py-32">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage:
-              "url(https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=80)",
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/85 via-emerald-900/70 to-black/50" />
-        <div className="relative mx-auto w-full max-w-5xl px-4 text-center sm:px-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100">About Us</p>
-          <h1 className="font-display mt-3 text-4xl font-bold text-white md:text-6xl">
-            Why visit V. Fulidhoo?
-          </h1>
-          <p className="mx-auto mt-4 max-w-3xl text-white/85">
-            We help travelers experience Fulidhoo like locals: authentic, safe, and unforgettable.
-          </p>
-        </div>
-      </section>
+      <HeroBanner
+        badge="About Us"
+        title="Why visit V. Fulidhoo?"
+        description="We help travelers experience Fulidhoo like locals: authentic, safe, and unforgettable."
+        backgroundImageUrl="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=80"
+        minHeightClassName="min-h-[65vh]"
+        contentClassName="mx-auto max-w-3xl text-center"
+      />
 
       <section className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6">
         <div className="rounded-3xl border border-black/5 bg-white p-7 shadow-sm sm:p-8">
