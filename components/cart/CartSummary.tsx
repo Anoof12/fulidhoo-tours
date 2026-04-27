@@ -55,7 +55,17 @@ export function CartSummary() {
   return (
     <div className="surface-card space-y-4 p-6">
       <h2 className="text-lg font-semibold text-slate-900">Your Cart</h2>
-      {items.length === 0 ? (
+      {messageType === "success" && message ? (
+        <div className="space-y-3 rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+          <p className="text-sm font-medium text-emerald-800">{message}</p>
+          <Link href="/account/bookings" className="block text-sm font-semibold text-primary">
+            View my bookings
+          </Link>
+          <Link href="/excursions" className="block text-sm font-semibold text-primary hover:underline">
+            Continue browsing excursions
+          </Link>
+        </div>
+      ) : items.length === 0 ? (
         <p className="text-sm text-slate-600">Cart is empty.</p>
       ) : (
         <div className="space-y-4">
@@ -121,23 +131,16 @@ export function CartSummary() {
               Fill name, email, and phone to enable reservation.
             </p>
           ) : null}
-          {message ? (
+          {message && messageType !== "success" ? (
             <p
               className={`text-sm ${
-                messageType === "success"
-                  ? "text-emerald-700"
-                  : messageType === "error"
-                    ? "text-red-700"
-                    : "text-slate-700"
+                messageType === "error"
+                  ? "text-red-700"
+                  : "text-slate-700"
               }`}
             >
               {message}
             </p>
-          ) : null}
-          {messageType === "success" ? (
-            <Link href="/account/bookings" className="block text-sm font-semibold text-primary">
-              View my bookings
-            </Link>
           ) : null}
           <Link href="/excursions" className="block text-sm font-semibold text-primary hover:underline">
             Continue browsing excursions

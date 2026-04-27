@@ -85,18 +85,20 @@ export function BookingWidget({ excursionId, title, pricePerPerson, maxCapacity 
         {screenReaderNotice}
       </p>
 
-      <label className="block text-sm font-medium text-slate-700">
+      <label htmlFor="booking-date" className="block text-sm font-medium text-slate-700">
         Date
         <input
+          id="booking-date"
           type="date"
           value={date}
           onChange={(event) => setDate(event.target.value)}
           className="input-base mt-1"
         />
       </label>
-      <label className="block text-sm font-medium text-slate-700">
+      <label htmlFor="booking-participants" className="block text-sm font-medium text-slate-700">
         Participants
         <input
+          id="booking-participants"
           type="number"
           min={1}
           max={Math.max(1, capacityAvailable)}

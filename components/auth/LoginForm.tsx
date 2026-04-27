@@ -51,17 +51,25 @@ export function LoginForm() {
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
       <div>
-        <label className="mb-1 block text-sm font-medium text-slate-700">Email</label>
+        <label htmlFor="login-email" className="mb-1 block text-sm font-medium text-slate-700">
+          Email
+        </label>
         <input
+          id="login-email"
           type="email"
+          autoComplete="email"
           className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none focus:border-primary"
           {...form.register("email")}
         />
       </div>
       <div>
-        <label className="mb-1 block text-sm font-medium text-slate-700">Password</label>
+        <label htmlFor="login-password" className="mb-1 block text-sm font-medium text-slate-700">
+          Password
+        </label>
         <input
+          id="login-password"
           type="password"
+          autoComplete="current-password"
           className="w-full rounded-xl border border-slate-300 px-3 py-2 outline-none focus:border-primary"
           {...form.register("password")}
         />
