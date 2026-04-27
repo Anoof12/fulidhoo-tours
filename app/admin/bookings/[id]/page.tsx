@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BookingStatusTimeline } from "@/components/booking/BookingStatusTimeline";
 import { MarkPaidButton } from "@/components/admin/MarkPaidButton";
 import { BookingStatusControl } from "@/components/admin/BookingStatusControl";
 import { prisma } from "@/lib/prisma";
@@ -26,6 +27,14 @@ export default async function AdminBookingDetailPage({
           <p>Payment: {booking.paymentStatus}</p>
           <p>Created: {booking.createdAt.toLocaleString()}</p>
           <p>Updated: {booking.updatedAt.toLocaleString()}</p>
+          <div className="mt-3">
+            <BookingStatusTimeline
+              status={booking.status}
+              createdAt={booking.createdAt}
+              updatedAt={booking.updatedAt}
+              bookingDate={booking.bookingDate}
+            />
+          </div>
           <BookingStatusControl bookingId={booking.id} currentStatus={booking.status} />
           {booking.paymentStatus !== "PAID" ? <MarkPaidButton bookingId={booking.id} /> : null}
         </div>

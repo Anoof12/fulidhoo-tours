@@ -2,6 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCapacityStatus } from "@/utils/capacity";
 
+type CapacityPayload = {
+  maxCapacity: number;
+  booked: number;
+  available: number;
+  percentage: number;
+  status: ReturnType<typeof getCapacityStatus>;
+};
+
+const capacityCache = new Map<string, { expiresAt: number; payload: CapacityPayload }>();
+const CAPACITY_CACHE_TTL_MS = 60_000;
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
@@ -28,6 +39,14 @@ export async function GET(
   start.setHours(0, 0, 0, 0);
   const end = new Date(date);
   end.setHours(23, 59, 59, 999);
+  const cacheKey = `${id}:${start.toISOString().slice(0, 10)}`;
+  const now = Date.now();
+  const cached = capacityCache.get(cacheKey);
+  if (cached && cached.expiresAt > now) {
+    return NextResponse.json(cached.payload, {
+      headers: { "Cache-Control": "private, max-age=30" },
+    });
+  }
 
   const agg = await prisma.booking.aggregate({
     where: {
@@ -44,11 +63,19 @@ export async function GET(
   const percentage = Math.round((booked / Math.max(1, maxCapacity)) * 100);
   const status = getCapacityStatus(percentage, available);
 
-  return NextResponse.json({
+  const payload: CapacityPayload = {
     maxCapacity,
     booked,
     available,
     percentage,
     status,
+  };
+  capacityCache.set(cacheKey, {
+    expiresAt: now + CAPACITY_CACHE_TTL_MS,
+    payload,
+  });
+
+  return NextResponse.json(payload, {
+    headers: { "Cache-Control": "private, max-age=30" },
   });
 }

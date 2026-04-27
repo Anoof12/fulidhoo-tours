@@ -49,7 +49,7 @@ export function ExcursionsCapacityCatalog() {
     const today = new Date().toISOString().slice(0, 10);
 
     async function load() {
-      const excursionsResponse = await fetch("/api/excursions?limit=100");
+      const excursionsResponse = await fetch("/api/excursions?page=1&limit=24");
       if (!excursionsResponse.ok) return;
       const payload = (await excursionsResponse.json()) as {
         data: Array<{

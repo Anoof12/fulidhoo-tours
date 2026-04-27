@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { BookingStatusTimeline } from "@/components/booking/BookingStatusTimeline";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
@@ -38,6 +39,14 @@ export default async function AccountBookingsPage() {
               <p>Participants: {booking.participants}</p>
               <p>Status: {booking.status}</p>
               <p>Total: ${booking.totalPrice.toString()}</p>
+              <div className="mt-3">
+                <BookingStatusTimeline
+                  status={booking.status}
+                  createdAt={booking.createdAt}
+                  updatedAt={booking.updatedAt}
+                  bookingDate={booking.bookingDate}
+                />
+              </div>
               <div className="mt-3 flex flex-wrap items-center gap-2">
                 <Link
                   href={`/api/user/bookings/${booking.id}/calendar`}

@@ -64,7 +64,7 @@ export function BookingWidget({
     }
 
     fetchCapacity();
-    const intervalId = setInterval(fetchCapacity, 30000);
+    const intervalId = setInterval(fetchCapacity, 90000);
     return () => {
       mounted = false;
       clearInterval(intervalId);
