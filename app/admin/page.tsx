@@ -3,22 +3,24 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
-  const [customers, bookings, activeExcursions, revenue, bookingLoad, excursionRows] = await Promise.all([
-    prisma.user.count({ where: { role: "CUSTOMER" } }),
-    prisma.booking.count(),
-    prisma.excursion.count({ where: { isActive: true } }),
-    prisma.booking.aggregate({ where: { paymentStatus: "PAID" }, _sum: { totalPrice: true } }),
-    prisma.booking.groupBy({
-      by: ["excursionId"],
-      where: { status: { in: ["PENDING", "CONFIRMED"] } },
-      _sum: { participants: true },
-    }),
-    prisma.excursion.findMany({
-      where: { isActive: true },
-      select: { id: true, title: true, maxCapacity: true },
-      orderBy: { createdAt: "desc" },
-    }),
-  ]);
+  // Sequential queries avoid exhausting Supabase pooler (often connection_limit: 1).
+  const customers = await prisma.user.count({ where: { role: "CUSTOMER" } });
+  const bookings = await prisma.booking.count();
+  const activeExcursions = await prisma.excursion.count({ where: { isActive: true } });
+  const revenue = await prisma.booking.aggregate({
+    where: { paymentStatus: "PAID" },
+    _sum: { totalPrice: true },
+  });
+  const bookingLoad = await prisma.booking.groupBy({
+    by: ["excursionId"],
+    where: { status: { in: ["PENDING", "CONFIRMED"] } },
+    _sum: { participants: true },
+  });
+  const excursionRows = await prisma.excursion.findMany({
+    where: { isActive: true },
+    select: { id: true, title: true, maxCapacity: true },
+    orderBy: { createdAt: "desc" },
+  });
 
   const loadMap = Object.fromEntries(bookingLoad.map((item) => [item.excursionId, item._sum.participants ?? 0]));
   const utilizationRows = excursionRows.map((excursion) => {

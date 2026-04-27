@@ -193,7 +193,7 @@ async function main() {
       included: ["Instructor", "Dive gear", "Tank", "Safety briefing"],
       excluded: ["Certification fee"],
       image:
-        "https://images.unsplash.com/photo-1525715843408-5c6ec44598f6?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1530521954074-e64f6810b32d?auto=format&fit=crop&w=1200&q=80",
     },
     {
       title: "Cultural Island Walk",
