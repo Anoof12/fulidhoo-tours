@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { hasAdminPanelAccess } from "@/lib/roles";
 import { excursionAdminSchema } from "@/lib/validators/excursionAdmin";
 
 function canManage(role?: string) {
-  return role === "ADMIN" || role === "TOUR_OPERATOR";
+  return hasAdminPanelAccess(role);
 }
 
 export async function GET(

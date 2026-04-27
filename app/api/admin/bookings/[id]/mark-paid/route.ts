@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { hasAdminPanelAccess } from "@/lib/roles";
 
 export async function PATCH(
   request: Request,
@@ -8,7 +9,7 @@ export async function PATCH(
 ) {
   void request;
   const user = await getCurrentUser();
-  if (!user || (user.role !== "ADMIN" && user.role !== "TOUR_OPERATOR")) {
+  if (!user || !hasAdminPanelAccess(user.role)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

@@ -1,6 +1,8 @@
+import { hasAdminPanelAccess } from "@/lib/roles";
+
 /** Where to send a user after sign-in based on role (staff vs traveler). */
 export function defaultPathForRole(role: string | undefined): string {
-  if (role === "ADMIN" || role === "TOUR_OPERATOR") {
+  if (hasAdminPanelAccess(role)) {
     return "/admin";
   }
   return "/";
@@ -17,7 +19,7 @@ export function resolvePostLoginRedirect(
   if (!callbackUrl || !callbackUrl.startsWith("/") || callbackUrl.startsWith("//")) {
     return fallback;
   }
-  const isStaff = role === "ADMIN" || role === "TOUR_OPERATOR";
+  const isStaff = hasAdminPanelAccess(role);
   if (callbackUrl.startsWith("/admin") && !isStaff) {
     return fallback;
   }

@@ -18,6 +18,30 @@ async function main() {
     },
   });
 
+  const guideStaffPassword = await bcrypt.hash("GuideStaff123!", 12);
+
+  await prisma.user.upsert({
+    where: { email: "guide@fulidhootours.com" },
+    update: {},
+    create: {
+      email: "guide@fulidhootours.com",
+      password: guideStaffPassword,
+      role: Role.GUIDE,
+      name: "Demo Guide",
+    },
+  });
+
+  await prisma.user.upsert({
+    where: { email: "staff@fulidhootours.com" },
+    update: {},
+    create: {
+      email: "staff@fulidhootours.com",
+      password: guideStaffPassword,
+      role: Role.STAFF,
+      name: "Demo Staff",
+    },
+  });
+
   const customer = await prisma.user.upsert({
     where: { email: "customer@example.com" },
     update: {},

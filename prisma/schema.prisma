@@ -10,6 +10,8 @@ datasource db {
 
 enum Role {
   CUSTOMER
+  GUIDE // Field guide: schedules, bookings, day-of updates
+  STAFF // Front desk / office: same dashboard access as operators by default
   TOUR_OPERATOR
   ADMIN
 }
