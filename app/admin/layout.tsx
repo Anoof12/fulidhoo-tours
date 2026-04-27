@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
+import { hasAdminPanelAccess } from "@/lib/roles";
 
 const items = [
   { href: "/admin", label: "Dashboard" },
@@ -11,15 +12,21 @@ const items = [
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();
-  if (!user || (user.role !== "ADMIN" && user.role !== "TOUR_OPERATOR")) {
+  if (!user) {
     redirect("/login");
+  }
+  if (!hasAdminPanelAccess(user.role)) {
+    redirect("/");
   }
 
   return (
     <div className="mx-auto grid w-full max-w-6xl gap-4 px-4 py-6 sm:gap-6 sm:px-6 sm:py-10 md:grid-cols-[250px_1fr]">
       <aside className="surface-card h-fit p-3 sm:p-4">
         <p className="font-display mb-1 text-xl font-semibold text-slate-900">Admin</p>
-        <p className="mb-3 text-xs text-slate-500">Operations Console</p>
+        <p className="mb-2 text-xs text-slate-500">Operations Console</p>
+        <p className="mb-3 rounded-md bg-emerald-50 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-100">
+          {user.role.replaceAll("_", " ")}
+        </p>
         <nav className="grid grid-cols-2 gap-2 md:grid-cols-1">
           {items.map((item) => (
             <Link

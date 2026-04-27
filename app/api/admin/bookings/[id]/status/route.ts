@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { hasAdminPanelAccess } from "@/lib/roles";
 
 const schema = z.object({
   status: z.nativeEnum(BookingStatus),
@@ -13,7 +14,7 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const user = await getCurrentUser();
-  if (!user || (user.role !== "ADMIN" && user.role !== "TOUR_OPERATOR")) {
+  if (!user || !hasAdminPanelAccess(user.role)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

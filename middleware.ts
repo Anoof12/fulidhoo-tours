@@ -1,7 +1,6 @@
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
-
-const STAFF_ROLES = new Set(["ADMIN", "TOUR_OPERATOR"]);
+import { hasAdminPanelAccess } from "@/lib/roles";
 
 function isPublicAuthPath(pathname: string): boolean {
   return (
@@ -22,13 +21,12 @@ export default withAuth(
 
     // Signed-in users should not stay on sign-in / sign-up
     if (token && (path.startsWith("/login") || path.startsWith("/register"))) {
-      const dest =
-        role && STAFF_ROLES.has(role) ? "/admin" : "/";
+      const dest = hasAdminPanelAccess(role) ? "/admin" : "/";
       return NextResponse.redirect(new URL(dest, req.url));
     }
 
     const isAdminRoute = path.startsWith("/admin");
-    if (isAdminRoute && role && !STAFF_ROLES.has(role)) {
+    if (isAdminRoute && role && !hasAdminPanelAccess(role)) {
       return NextResponse.redirect(new URL("/", req.url));
     }
 

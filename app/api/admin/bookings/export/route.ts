@@ -2,6 +2,7 @@ import { BookingStatus, PaymentStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { hasAdminPanelAccess } from "@/lib/roles";
 
 function csvEscape(value: string) {
   const escaped = value.replaceAll('"', '""');
@@ -10,7 +11,7 @@ function csvEscape(value: string) {
 
 export async function GET(request: Request) {
   const user = await getCurrentUser();
-  if (!user || (user.role !== "ADMIN" && user.role !== "TOUR_OPERATOR")) {
+  if (!user || !hasAdminPanelAccess(user.role)) {
     return new NextResponse("Unauthorized", { status: 401 });
   }
 
