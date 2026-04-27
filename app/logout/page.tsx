@@ -10,7 +10,7 @@ export default function LogoutPage() {
         <p className="mt-2 text-sm text-slate-600">You can sign out from your account securely.</p>
         <button
           type="button"
-          onClick={() => signOut({ callbackUrl: "/" })}
+          onClick={() => signOut({ callbackUrl: "/login" })}
           className="mt-4 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white"
         >
           Sign out now

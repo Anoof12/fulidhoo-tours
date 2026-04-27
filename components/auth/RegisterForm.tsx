@@ -1,12 +1,13 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { resolvePostLoginRedirect } from "@/lib/roleRedirects";
 
 const registerSchema = z
   .object({
@@ -74,7 +75,10 @@ export function RegisterForm() {
     }
 
     setIsLoading(false);
-    router.push("/account/dashboard");
+    router.refresh();
+    const session = await getSession();
+    const nextPath = resolvePostLoginRedirect(session?.user?.role, null);
+    router.push(nextPath);
     router.refresh();
   }
 

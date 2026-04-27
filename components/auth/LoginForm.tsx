@@ -1,12 +1,13 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { resolvePostLoginRedirect } from "@/lib/roleRedirects";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -17,6 +18,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<LoginFormValues>({
@@ -38,7 +40,11 @@ export function LoginForm() {
       return;
     }
 
-    router.push("/account/dashboard");
+    router.refresh();
+    const session = await getSession();
+    const callbackUrl = searchParams.get("callbackUrl");
+    const nextPath = resolvePostLoginRedirect(session?.user?.role, callbackUrl);
+    router.push(nextPath);
     router.refresh();
   }
 
