@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    // Prevent workspace-root mis-detection when parent folders also have lockfiles.
+    root: process.cwd(),
+  },
   images: {
     remotePatterns: [
       {

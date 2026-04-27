@@ -20,9 +20,10 @@ export default defineConfig({
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
-    command: "npm run dev -- --hostname localhost --port 3000",
+    // Run against production server to avoid dev-HMR chunk flakiness in E2E.
+    command: "npm run build && npm run start -- --hostname localhost --port 3000",
     url: `${baseURL}/login`,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 180_000,
     stdout: "pipe",
     stderr: "pipe",
