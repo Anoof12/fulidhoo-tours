@@ -43,7 +43,7 @@ export function RecentlyViewed() {
       const slugs: string[] = raw ? JSON.parse(raw) : [];
       if (!slugs.length) return;
 
-      const response = await fetch("/api/excursions?limit=100");
+      const response = await fetch("/api/excursions?page=1&limit=24");
       if (!response.ok) return;
       const payload = (await response.json()) as {
         data: Array<{

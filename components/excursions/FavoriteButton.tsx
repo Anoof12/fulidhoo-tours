@@ -3,21 +3,39 @@
 import { Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 
+let favoritesPromise: Promise<{ unauthorized: boolean; ids: string[] }> | null = null;
+
+async function loadFavoritesOnce(): Promise<{ unauthorized: boolean; ids: string[] }> {
+  if (!favoritesPromise) {
+    favoritesPromise = fetch("/api/favorites")
+      .then(async (res) => {
+        if (res.status === 401) return { unauthorized: true, ids: [] };
+        if (!res.ok) return { unauthorized: false, ids: [] };
+        const body = (await res.json()) as { data: { excursionId: string }[] };
+        return { unauthorized: false, ids: body.data.map((item) => item.excursionId) };
+      })
+      .catch(() => ({ unauthorized: false, ids: [] }));
+  }
+  return favoritesPromise;
+}
+
 export function FavoriteButton({ excursionId }: { excursionId: string }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [guestMode, setGuestMode] = useState(false);
 
   useEffect(() => {
     let mounted = true;
     async function load() {
-      const res = await fetch("/api/favorites");
-      if (!res.ok) {
-        if (mounted) setLoading(false);
+      const body = await loadFavoritesOnce();
+      if (!mounted) return;
+      if (body.unauthorized) {
+        setGuestMode(true);
+        setLoading(false);
         return;
       }
-      const body = (await res.json()) as { data: { excursionId: string }[] };
       if (mounted) {
-        setIsFavorite(body.data.some((f) => f.excursionId === excursionId));
+        setIsFavorite(body.ids.includes(excursionId));
         setLoading(false);
       }
     }
@@ -29,11 +47,18 @@ export function FavoriteButton({ excursionId }: { excursionId: string }) {
 
   async function toggle() {
     if (loading) return;
+    if (guestMode) {
+      window.location.href = `/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`;
+      return;
+    }
     if (isFavorite) {
       const res = await fetch(`/api/favorites?excursionId=${encodeURIComponent(excursionId)}`, {
         method: "DELETE",
       });
-      if (res.ok) setIsFavorite(false);
+      if (res.ok) {
+        setIsFavorite(false);
+        favoritesPromise = null;
+      }
       return;
     }
     const res = await fetch("/api/favorites", {
@@ -42,10 +67,13 @@ export function FavoriteButton({ excursionId }: { excursionId: string }) {
       body: JSON.stringify({ excursionId }),
     });
     if (res.status === 401) {
-      window.location.href = `/login?redirect=${encodeURIComponent("/excursions")}`;
+      window.location.href = `/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`;
       return;
     }
-    if (res.ok) setIsFavorite(true);
+    if (res.ok) {
+      setIsFavorite(true);
+      favoritesPromise = null;
+    }
   }
 
   return (

@@ -41,7 +41,10 @@ export async function GET(request: NextRequest) {
     prisma.excursion.count({ where }),
     prisma.excursion.findMany({
       where,
-      include: { images: { orderBy: { order: "asc" }, take: 1 }, reviews: true },
+      include: {
+        images: { orderBy: { order: "asc" }, take: 1 },
+        reviews: { select: { rating: true } },
+      },
       orderBy,
       skip: (page - 1) * limit,
       take: limit,

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { BookingWidget } from "@/components/excursions/BookingWidget";
 import { FavoriteButton } from "@/components/excursions/FavoriteButton";
+import { SeaConditionHint } from "@/components/excursions/SeaConditionHint";
 import { ShareButton } from "@/components/excursions/ShareButton";
 import { ViewedTracker } from "@/components/excursions/ViewedTracker";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
@@ -84,6 +85,7 @@ export default async function ExcursionDetailPage({ params, searchParams }: Excu
             <strong>Meeting Point:</strong> {excursion.meetingPoint}
           </p>
         </div>
+        <SeaConditionHint category={excursion.category} />
 
         <div className="surface-card space-y-4 p-6">
           <h2 className="font-display text-2xl font-bold text-slate-900">About This Excursion</h2>
