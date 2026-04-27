@@ -14,12 +14,11 @@ function isPublicAuthPath(pathname: string): boolean {
 }
 
 export default withAuth(
-  function middleware(req) {
+  function proxy(req) {
     const token = req.nextauth.token;
     const path = req.nextUrl.pathname;
     const role = token?.role as string | undefined;
 
-    // Signed-in users should not stay on sign-in / sign-up
     if (token && (path.startsWith("/login") || path.startsWith("/register"))) {
       const dest = hasAdminPanelAccess(role) ? "/admin" : "/";
       return NextResponse.redirect(new URL(dest, req.url));
@@ -36,9 +35,7 @@ export default withAuth(
     callbacks: {
       authorized: ({ token, req }) => {
         const path = req.nextUrl.pathname;
-        if (isPublicAuthPath(path)) {
-          return true;
-        }
+        if (isPublicAuthPath(path)) return true;
         return !!token;
       },
     },
