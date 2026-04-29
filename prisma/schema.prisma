@@ -38,13 +38,6 @@ enum BookingStatus {
   CANCELLED
 }
 
-enum PaymentStatus {
-  UNPAID
-  PAID
-  REFUNDED
-  FAILED
-}
-
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -157,8 +150,6 @@ model Booking {
   participants    Int
   totalPrice      Decimal       @db.Decimal(10, 2)
   status          BookingStatus @default(PENDING)
-  paymentStatus   PaymentStatus @default(UNPAID)
-  paymentIntentId String?
   specialRequests String?
   customerName    String
   customerEmail   String

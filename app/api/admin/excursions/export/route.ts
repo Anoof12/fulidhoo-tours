@@ -5,7 +5,8 @@ import { prisma } from "@/lib/prisma";
 import { hasAdminPanelAccess } from "@/lib/roles";
 
 function csvEscape(value: string) {
-  return `"${value.replaceAll('"', '""')}"`;
+  const safe = /^[=+\-@\t\r]/.test(value) ? `'${value}` : value;
+  return `"${safe.replaceAll('"', '""')}"`;
 }
 
 export async function GET(request: Request) {

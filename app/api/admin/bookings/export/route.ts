@@ -1,12 +1,13 @@
-import { BookingStatus, PaymentStatus } from "@prisma/client";
+import { BookingStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { hasAdminPanelAccess } from "@/lib/roles";
 
 function csvEscape(value: string) {
-  const escaped = value.replaceAll('"', '""');
-  return `"${escaped}"`;
+  // Prefix formula-trigger characters to prevent CSV injection
+  const safe = /^[=+\-@\t\r]/.test(value) ? `'${value}` : value;
+  return `"${safe.replaceAll('"', '""')}"`;
 }
 
 export async function GET(request: Request) {
@@ -19,7 +20,6 @@ export async function GET(request: Request) {
   const from = searchParams.get("from");
   const to = searchParams.get("to");
   const status = searchParams.get("status");
-  const paymentStatus = searchParams.get("paymentStatus");
   const excursionId = searchParams.get("excursionId");
   const q = searchParams.get("q");
 
@@ -34,7 +34,6 @@ export async function GET(request: Request) {
           }
         : {}),
       ...(status ? { status: status as BookingStatus } : {}),
-      ...(paymentStatus ? { paymentStatus: paymentStatus as PaymentStatus } : {}),
       ...(excursionId ? { excursionId } : {}),
       ...(q
         ? {
@@ -54,24 +53,25 @@ export async function GET(request: Request) {
     "Booking Number",
     "Customer Name",
     "Email",
+    "Phone",
     "Excursion",
     "Date",
     "Participants",
-    "Total",
+    "Total (USD)",
     "Status",
-    "Payment Status",
   ].join(",");
+
   const rows = bookings.map((booking) =>
     [
       booking.bookingNumber,
       booking.customerName,
       booking.customerEmail,
+      booking.customerPhone,
       booking.excursion.title,
-      booking.bookingDate.toISOString(),
+      booking.bookingDate.toISOString().slice(0, 10),
       String(booking.participants),
       booking.totalPrice.toString(),
       booking.status,
-      booking.paymentStatus,
     ]
       .map(csvEscape)
       .join(","),

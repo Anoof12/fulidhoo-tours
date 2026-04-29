@@ -8,7 +8,7 @@ export default async function AdminDashboardPage() {
   const bookings = await prisma.booking.count();
   const activeExcursions = await prisma.excursion.count({ where: { isActive: true } });
   const revenue = await prisma.booking.aggregate({
-    where: { paymentStatus: "PAID" },
+    where: { status: { in: ["CONFIRMED", "COMPLETED"] } },
     _sum: { totalPrice: true },
   });
   const bookingLoad = await prisma.booking.groupBy({

@@ -24,7 +24,7 @@ export default async function AccountDashboardPage() {
   ]);
 
   const totalSpent = await prisma.booking.aggregate({
-    where: { userId: user!.id, paymentStatus: "PAID" },
+    where: { userId: user!.id, status: { in: ["CONFIRMED", "COMPLETED"] } },
     _sum: { totalPrice: true },
   });
 

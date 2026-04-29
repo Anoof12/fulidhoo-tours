@@ -14,7 +14,7 @@ export async function GET() {
     prisma.booking.count(),
     prisma.excursion.count({ where: { isActive: true } }),
     prisma.booking.aggregate({
-      where: { paymentStatus: "PAID" },
+      where: { status: { in: ["CONFIRMED", "COMPLETED"] } },
       _sum: { totalPrice: true },
     }),
   ]);

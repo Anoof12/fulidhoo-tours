@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BookingStatusTimeline } from "@/components/booking/BookingStatusTimeline";
-import { MarkPaidButton } from "@/components/admin/MarkPaidButton";
 import { BookingStatusControl } from "@/components/admin/BookingStatusControl";
 import { prisma } from "@/lib/prisma";
 
@@ -24,7 +23,6 @@ export default async function AdminBookingDetailPage({
         <div className="rounded-lg bg-slate-50 p-3 text-sm">
           <p className="font-semibold">Booking Info</p>
           <p>Status: {booking.status}</p>
-          <p>Payment: {booking.paymentStatus}</p>
           <p>Created: {booking.createdAt.toLocaleString()}</p>
           <p>Updated: {booking.updatedAt.toLocaleString()}</p>
           <div className="mt-3">
@@ -36,7 +34,6 @@ export default async function AdminBookingDetailPage({
             />
           </div>
           <BookingStatusControl bookingId={booking.id} currentStatus={booking.status} />
-          {booking.paymentStatus !== "PAID" ? <MarkPaidButton bookingId={booking.id} /> : null}
         </div>
         <div className="rounded-lg bg-slate-50 p-3 text-sm">
           <p className="font-semibold">Customer</p>
@@ -62,9 +59,12 @@ export default async function AdminBookingDetailPage({
           </Link>
         </div>
         <div className="rounded-lg bg-slate-50 p-3 text-sm">
-          <p className="font-semibold">Payment</p>
-          <p>Total: ${booking.totalPrice.toString()}</p>
-          <p>Payment status: {booking.paymentStatus}</p>
+          <p className="font-semibold">Booking Total</p>
+          <p className="text-lg font-bold text-slate-900">${booking.totalPrice.toString()}</p>
+          <p className="text-xs text-slate-500">
+            {booking.participants} participant{booking.participants !== 1 ? "s" : ""} &times; $
+            {(Number(booking.totalPrice) / booking.participants).toFixed(2)} per person
+          </p>
         </div>
       </div>
     </div>
