@@ -10,7 +10,6 @@ const schema = z.object({
       excursionId: z.string(),
       date: z.string(),
       participants: z.number().int().positive(),
-      totalPrice: z.number().positive(),
     }),
   ),
   customerName: z.string().min(2),
@@ -41,10 +40,13 @@ export async function POST(request: Request) {
         const item = parsed.items[index];
         const excursion = await tx.excursion.findUnique({
           where: { id: item.excursionId },
-          select: { id: true, maxCapacity: true, title: true },
+          select: { id: true, maxCapacity: true, title: true, pricePerPerson: true, isActive: true },
         });
         if (!excursion) {
           throw new Error("Selected excursion no longer exists. Please refresh and try again.");
+        }
+        if (!excursion.isActive) {
+          throw new Error(`${excursion.title} is no longer available.`);
         }
 
         const bookingDate = new Date(item.date);
@@ -74,6 +76,9 @@ export async function POST(request: Request) {
           );
         }
 
+        // Calculate price server-side to prevent client manipulation
+        const totalPrice = Number(excursion.pricePerPerson) * item.participants;
+
         const booking = await tx.booking.create({
           data: {
             bookingNumber: `BK-${Date.now()}-${index + 1}`,
@@ -81,9 +86,8 @@ export async function POST(request: Request) {
             excursionId: item.excursionId,
             bookingDate,
             participants: item.participants,
-            totalPrice: item.totalPrice,
+            totalPrice,
             status: "CONFIRMED",
-            paymentStatus: "UNPAID",
             customerName: parsed.customerName,
             customerEmail: parsed.customerEmail,
             customerPhone: parsed.customerPhone,

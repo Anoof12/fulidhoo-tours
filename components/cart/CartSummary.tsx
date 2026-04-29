@@ -49,7 +49,7 @@ export function CartSummary() {
 
     clearCart();
     setMessageType("success");
-    setMessage("Booking reserved successfully. Payment will be collected on-site.");
+    setMessage("Booking reserved successfully.");
   }
 
   return (
@@ -86,9 +86,6 @@ export function CartSummary() {
             </div>
           ))}
           <p className="pt-2 text-sm font-semibold text-slate-900">Total: ${total}</p>
-          <div className="mt-2 rounded-lg bg-amber-50 p-3 text-xs text-amber-800">
-            Online payment is disabled. Your spot will be reserved, and payment is due on-site.
-          </div>
           <div className="space-y-2">
             <input
               placeholder="Full name"

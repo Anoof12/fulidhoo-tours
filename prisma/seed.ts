@@ -295,12 +295,6 @@ async function main() {
           : i % 3 === 0
             ? "PENDING"
             : "CONFIRMED";
-    const paymentStatus =
-      status === "CANCELLED"
-        ? "REFUNDED"
-        : status === "COMPLETED" || i % 5 === 0
-          ? "PAID"
-          : "UNPAID";
 
     await prisma.booking.upsert({
       where: { bookingNumber: `DEMO-BK-${String(i + 1).padStart(4, "0")}` },
@@ -311,7 +305,6 @@ async function main() {
         participants,
         totalPrice: participants * excursion.pricePerPerson,
         status,
-        paymentStatus,
         customerName: selectedUser.name ?? `Customer ${i + 1}`,
         customerEmail: selectedUser.email,
         customerPhone: selectedUser.phone ?? "+9609000000",
@@ -326,7 +319,6 @@ async function main() {
         participants,
         totalPrice: participants * excursion.pricePerPerson,
         status,
-        paymentStatus,
         customerName: selectedUser.name ?? `Customer ${i + 1}`,
         customerEmail: selectedUser.email,
         customerPhone: selectedUser.phone ?? "+9609000000",

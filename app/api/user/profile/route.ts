@@ -31,12 +31,19 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: "Only customer accounts can access this endpoint." }, { status: 403 });
   }
 
-  const body = await request.json();
-  const data = updateSchema.parse(body);
-  const updated = await prisma.user.update({
-    where: { id: user.id },
-    data,
-    select: { id: true, name: true, email: true, phone: true, country: true, role: true },
-  });
-  return NextResponse.json(updated);
+  try {
+    const body = await request.json();
+    const data = updateSchema.parse(body);
+    const updated = await prisma.user.update({
+      where: { id: user.id },
+      data,
+      select: { id: true, name: true, email: true, phone: true, country: true, role: true },
+    });
+    return NextResponse.json(updated);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ error: "Invalid input", details: error.flatten() }, { status: 400 });
+    }
+    return NextResponse.json({ error: "Failed to update profile." }, { status: 500 });
+  }
 }

@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { BookingStatus, PaymentStatus } from "@prisma/client";
+import { BookingStatus } from "@prisma/client";
 import { BulkBookingActions } from "@/components/admin/BulkBookingActions";
 import { BookingStatusControl } from "@/components/admin/BookingStatusControl";
-import { MarkPaidButton } from "@/components/admin/MarkPaidButton";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +22,6 @@ export default async function AdminBookingsPage({
     from?: string;
     to?: string;
     status?: BookingStatus;
-    paymentStatus?: PaymentStatus;
     excursionId?: string;
     sort?: keyof typeof sortMap;
   }>;
@@ -43,7 +41,6 @@ export default async function AdminBookingsPage({
         }
       : {}),
     ...(params.status ? { status: params.status } : {}),
-    ...(params.paymentStatus ? { paymentStatus: params.paymentStatus } : {}),
     ...(params.excursionId ? { excursionId: params.excursionId } : {}),
     ...(params.q
       ? {
@@ -77,7 +74,6 @@ export default async function AdminBookingsPage({
       from: params.from ?? "",
       to: params.to ?? "",
       status: params.status ?? "",
-      paymentStatus: params.paymentStatus ?? "",
       excursionId: params.excursionId ?? "",
       sort,
     }).filter(([, value]) => value),
@@ -102,14 +98,6 @@ export default async function AdminBookingsPage({
         <select name="status" defaultValue={params.status ?? ""} className="input-base">
           <option value="">All statuses</option>
           {["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED"].map((status) => (
-            <option key={status} value={status}>
-              {status}
-            </option>
-          ))}
-        </select>
-        <select name="paymentStatus" defaultValue={params.paymentStatus ?? ""} className="input-base">
-          <option value="">All payments</option>
-          {["UNPAID", "PAID", "REFUNDED", "FAILED"].map((status) => (
             <option key={status} value={status}>
               {status}
             </option>
@@ -157,20 +145,15 @@ export default async function AdminBookingsPage({
             </p>
             <p>{booking.user.email}</p>
             <p>Status: {booking.status}</p>
-            <p>Payment: {booking.paymentStatus}</p>
             <p>
               Date: {new Date(booking.bookingDate).toLocaleDateString()} | Participants:{" "}
               {booking.participants}
             </p>
+            <p>Total: ${booking.totalPrice.toString()}</p>
             <Link href={`/admin/bookings/${booking.id}`} className="text-xs font-semibold text-primary underline">
               View details
             </Link>
             <BookingStatusControl bookingId={booking.id} currentStatus={booking.status} />
-            {booking.paymentStatus !== "PAID" ? (
-              <MarkPaidButton bookingId={booking.id} />
-            ) : (
-              <p className="mt-2 text-xs font-semibold text-emerald-700">Paid on site</p>
-            )}
           </div>
         ))}
       </div>

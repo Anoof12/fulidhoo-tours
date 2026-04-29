@@ -68,14 +68,17 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: "excursionId is required" }, { status: 400 });
   }
 
-  await prisma.favorite.delete({
-    where: {
-      userId_excursionId: {
-        userId: user.id,
-        excursionId,
+  try {
+    await prisma.favorite.delete({
+      where: {
+        userId_excursionId: {
+          userId: user.id,
+          excursionId,
+        },
       },
-    },
-  });
-
-  return NextResponse.json({ success: true });
+    });
+    return NextResponse.json({ success: true });
+  } catch {
+    return NextResponse.json({ success: true });
+  }
 }

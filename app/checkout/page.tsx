@@ -15,7 +15,7 @@ export default async function CheckoutPage() {
         Reserve Your Booking
       </h1>
       <p className="mb-5 text-sm text-slate-600 sm:mb-6">
-        Confirm your excursion details and reserve your spot now. Payment will be made on-site.
+        Confirm your excursion details and reserve your spot.
       </p>
       <div className="mb-5">
         <BookingCountdown minutes={15} label="Reservation session" />
