@@ -41,11 +41,6 @@ export function ExcursionCard({
           </div>
         </div>
         {showAvailabilityBadge ? <CapacityBar current={safeBooked} max={excursion.maxCapacity} variant="badge" /> : null}
-        {percentage > 90 ? (
-          <span className="inline-flex rounded-full bg-red-100 px-2 py-1 text-xs font-semibold text-red-700">
-            Almost Full
-          </span>
-        ) : null}
 
         <h3 className="text-lg font-semibold text-slate-900">{excursion.title}</h3>
         <p className="line-clamp-2 text-sm text-slate-600">{excursion.shortDescription}</p>
