@@ -19,8 +19,8 @@ export function Footer() {
           <p className="max-w-md text-base leading-relaxed text-slate-300">
             Book snorkeling, diving, fishing, and island experiences around{" "}
             <strong className="font-semibold text-slate-100">V. Fulidhoo</strong> (Vaavu Atoll),
-            Maldives. Reserve through the site (cart and checkout); payment for excursions is
-            collected on-site with your operator.
+            Maldives. Browse and reserve excursions online; payment is collected on-site with
+            your operator on the day of your trip.
           </p>
           <div className="mt-6 flex flex-col gap-3 text-sm text-slate-400">
             <span className="inline-flex items-start gap-2">
