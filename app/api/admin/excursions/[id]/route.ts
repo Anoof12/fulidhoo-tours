@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -77,7 +78,10 @@ export async function PUT(
       return updated;
     });
     return NextResponse.json({ success: true, excursion });
-  } catch {
+  } catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
+      return NextResponse.json({ error: "An excursion with that slug already exists." }, { status: 409 });
+    }
     return NextResponse.json({ error: "Failed to update excursion" }, { status: 500 });
   }
 }
