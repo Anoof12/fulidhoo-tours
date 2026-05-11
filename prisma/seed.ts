@@ -108,8 +108,8 @@ async function main() {
       meetingPoint: "Fulidhoo Main Jetty",
       included: ["Guide", "Snorkeling gear", "Water", "Safety briefing"],
       excluded: ["Personal expenses", "Tips"],
-      image:
-        "https://images.unsplash.com/photo-1551244072-5d12893278ab?auto=format&fit=crop&w=1200&q=80",
+      image: "https://images.unsplash.com/photo-1596178060671-7a80dc8059ea?auto=format&fit=crop&w=1200&q=80",
+      imageAlt: "https://images.unsplash.com/photo-1566737236500-073563b2dfad?auto=format&fit=crop&w=1200&q=80",
     },
     {
       title: "Stingray Beach Experience",
@@ -122,8 +122,8 @@ async function main() {
       meetingPoint: "Beachside Dock",
       included: ["Guide", "Water", "Snorkel mask"],
       excluded: ["Hotel transfer"],
-      image:
-        "https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?auto=format&fit=crop&w=1200&q=80",
+      image: "https://images.unsplash.com/photo-1618434536390-bccbe1b27491?auto=format&fit=crop&w=1200&q=80",
+      imageAlt: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80",
     },
     {
       title: "Sunset Cruise",
@@ -136,8 +136,8 @@ async function main() {
       meetingPoint: "Harbor Pier",
       included: ["Boat ride", "Refreshments", "Guide"],
       excluded: ["Private pickup"],
-      image:
-        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
+      image: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1200&q=80",
+      imageAlt: "https://images.unsplash.com/photo-1559063566-a1c5e2c6bad8?auto=format&fit=crop&w=1200&q=80",
     },
     {
       title: "Night Fishing Adventure",
@@ -150,8 +150,8 @@ async function main() {
       meetingPoint: "Fulidhoo Main Jetty",
       included: ["Fishing gear", "Guide", "Bait", "Water"],
       excluded: ["Meal"],
-      image:
-        "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=80",
+      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=80",
+      imageAlt: "https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?auto=format&fit=crop&w=1200&q=80",
     },
     {
       title: "Turtle Reef Discovery",
@@ -164,8 +164,8 @@ async function main() {
       meetingPoint: "Turtle Point Dock",
       included: ["Guide", "Snorkeling gear", "Water"],
       excluded: ["GoPro rental"],
-      image:
-        "https://images.unsplash.com/photo-1560275619-4662e36fa65c?auto=format&fit=crop&w=1200&q=80",
+      image: "https://images.unsplash.com/photo-1559963110-71b394e2494d?auto=format&fit=crop&w=1200&q=80",
+      imageAlt: "https://images.unsplash.com/photo-1535591702424-6c9f07d5c668?auto=format&fit=crop&w=1200&q=80",
     },
     {
       title: "Sandbank Picnic Escape",
@@ -178,8 +178,8 @@ async function main() {
       meetingPoint: "Harbor Pier",
       included: ["Boat transfer", "Picnic setup", "Guide", "Water"],
       excluded: ["Professional photos"],
-      image:
-        "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=80",
+      image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1200&q=80",
+      imageAlt: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80",
     },
     {
       title: "Beginners Scuba Intro",
@@ -192,8 +192,8 @@ async function main() {
       meetingPoint: "Dive Center Front Desk",
       included: ["Instructor", "Dive gear", "Tank", "Safety briefing"],
       excluded: ["Certification fee"],
-      image:
-        "https://images.unsplash.com/photo-1530521954074-e64f6810b32d?auto=format&fit=crop&w=1200&q=80",
+      image: "https://images.unsplash.com/photo-1547026374-4a0adf4c8a28?auto=format&fit=crop&w=1200&q=80",
+      imageAlt: "https://images.unsplash.com/photo-1579154341098-e4e158cc7f55?auto=format&fit=crop&w=1200&q=80",
     },
     {
       title: "Cultural Island Walk",
@@ -206,8 +206,8 @@ async function main() {
       meetingPoint: "Island Square",
       included: ["Local guide", "Tea stop"],
       excluded: ["Souvenirs"],
-      image:
-        "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80",
+      image: "https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=1200&q=80",
+      imageAlt: "https://images.unsplash.com/photo-1510988613285-e03abcdb065c?auto=format&fit=crop&w=1200&q=80",
     },
   ] as const;
 
@@ -260,8 +260,8 @@ async function main() {
     await prisma.excursionImage.create({
       data: {
         excursionId: created.id,
-        url: "https://images.unsplash.com/photo-1483683804023-6ccdb62f86ef?auto=format&fit=crop&w=1200&q=80",
-        altText: `${created.title} alternate`,
+        url: excursion.imageAlt,
+        altText: `${created.title} — Vaavu Atoll`,
         isPrimary: false,
         order: 1,
       },
