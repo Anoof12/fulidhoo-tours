@@ -11,9 +11,11 @@ export default async function AdminDashboardPage() {
     where: { status: { in: ["CONFIRMED", "COMPLETED"] } },
     _sum: { totalPrice: true },
   });
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
   const bookingLoad = await prisma.booking.groupBy({
     by: ["excursionId"],
-    where: { status: { in: ["PENDING", "CONFIRMED"] } },
+    where: { status: { in: ["PENDING", "CONFIRMED"] }, bookingDate: { gte: today } },
     _sum: { participants: true },
   });
   const excursionRows = await prisma.excursion.findMany({
@@ -25,7 +27,8 @@ export default async function AdminDashboardPage() {
   const loadMap = Object.fromEntries(bookingLoad.map((item) => [item.excursionId, item._sum.participants ?? 0]));
   const utilizationRows = excursionRows.map((excursion) => {
     const booked = loadMap[excursion.id] ?? 0;
-    const percentage = Math.round((booked / Math.max(1, excursion.maxCapacity)) * 100);
+    // Cap percentage at 100 — booked spans multiple upcoming dates, so raw % is for trend only
+    const percentage = Math.min(100, Math.round((booked / Math.max(1, excursion.maxCapacity)) * 100));
     return { excursion, booked, percentage };
   });
   const fullyBooked = utilizationRows.filter((row) => row.percentage >= 100);
@@ -44,13 +47,14 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="rounded-3xl border border-black/5 bg-white p-6 shadow-sm">
-        <h2 className="font-display text-2xl font-semibold text-slate-900">Capacity Utilization</h2>
+        <h2 className="font-display text-2xl font-semibold text-slate-900">Upcoming Demand</h2>
+        <p className="mt-1 text-xs text-slate-500">Participants across all pending &amp; confirmed upcoming bookings vs. per-session capacity.</p>
         <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {utilizationRows.map((row) => (
             <div key={row.excursion.id} className="rounded-lg border border-slate-200 p-4 transition hover:border-primary/40">
               <p className="text-sm font-semibold text-slate-900">{row.excursion.title}</p>
               <p className="text-xs text-slate-600">
-                {row.booked} / {row.excursion.maxCapacity} booked
+                {row.booked} upcoming participants · max {row.excursion.maxCapacity} per session
               </p>
               <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-200">
                 <div
