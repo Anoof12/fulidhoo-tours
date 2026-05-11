@@ -1,3 +1,5 @@
+import { ContactForm } from "./ContactForm";
+
 export const metadata = {
   title: "Contact | Fulidhoo Tours",
   description: "Contact Fulidhoo Tours for excursion questions and support.",
@@ -41,18 +43,7 @@ export default function ContactPage() {
 
         <div className="rounded-3xl border border-black/5 bg-white p-6 shadow-sm lg:col-span-2">
           <h2 className="font-display text-2xl font-bold text-slate-900">Send us a message</h2>
-          <form className="mt-5 space-y-3">
-            <div className="grid gap-3 sm:grid-cols-2">
-              <input className="input-base" placeholder="First name" />
-              <input className="input-base" placeholder="Last name" />
-            </div>
-            <input type="email" className="input-base" placeholder="Email address" />
-            <input className="input-base" placeholder="Subject" />
-            <textarea className="input-base min-h-32" placeholder="Message" />
-            <button type="button" className="btn-primary">
-              Send message
-            </button>
-          </form>
+          <ContactForm />
         </div>
       </section>
     </div>
