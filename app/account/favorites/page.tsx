@@ -1,8 +1,17 @@
 import Link from "next/link";
+import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
+
+async function removeFavorite(formData: FormData) {
+  "use server";
+  const favoriteId = formData.get("favoriteId") as string;
+  if (!favoriteId) return;
+  await prisma.favorite.delete({ where: { id: favoriteId } });
+  revalidatePath("/account/favorites");
+}
 
 export default async function FavoritesPage() {
   const user = await getCurrentUser();
@@ -33,12 +42,23 @@ export default async function FavoritesPage() {
             <div key={favorite.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
               <p className="font-semibold text-slate-900">{favorite.excursion.title}</p>
               <p className="text-sm text-slate-600">{favorite.excursion.shortDesc}</p>
-              <Link
-                href={`/excursions/${favorite.excursion.slug}`}
-                className="mt-3 inline-block text-sm font-semibold text-primary"
-              >
-                View excursion
-              </Link>
+              <div className="mt-3 flex items-center gap-4">
+                <Link
+                  href={`/excursions/${favorite.excursion.slug}`}
+                  className="text-sm font-semibold text-primary"
+                >
+                  View excursion
+                </Link>
+                <form action={removeFavorite}>
+                  <input type="hidden" name="favoriteId" value={favorite.id} />
+                  <button
+                    type="submit"
+                    className="text-sm font-medium text-slate-500 hover:text-red-600 transition-colors"
+                  >
+                    Remove
+                  </button>
+                </form>
+              </div>
             </div>
           ))}
         </div>
