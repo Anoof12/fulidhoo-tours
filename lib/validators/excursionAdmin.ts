@@ -33,7 +33,7 @@ export const excursionAdminSchema = z.object({
   meetingPoint: z.string().min(5),
   included: z.array(z.string().min(1)).min(1),
   excluded: z.array(z.string().min(1)).min(1),
-  images: z.array(imageSchema).min(1),
+  images: z.array(imageSchema).min(0),
   blackoutDates: z.array(z.string()).default([]),
   isActive: z.boolean(),
 });
