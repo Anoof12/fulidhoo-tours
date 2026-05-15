@@ -137,7 +137,13 @@ export function ExcursionForm({
     const body = await res.json();
     setIsSaving(false);
     if (!res.ok) {
-      setError(body.error?.formErrors?.[0] ?? body.error ?? "Save failed");
+      const errObj = body.error;
+      setError(
+        (typeof errObj === "string" ? errObj : null) ??
+          errObj?.formErrors?.[0] ??
+          Object.values(errObj?.fieldErrors ?? {})[0]?.[0] ??
+          "Save failed",
+      );
       return;
     }
     router.push("/admin/excursions");
