@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { BookingStatusTimeline } from "@/components/booking/BookingStatusTimeline";
 import { getCurrentUser } from "@/lib/auth";
@@ -61,22 +60,6 @@ export default async function AccountBookingsPage() {
                   Rebook this trip
                 </Link>
               </div>
-              <details className="mt-3 rounded-xl border border-slate-200 bg-white p-3">
-                <summary className="cursor-pointer text-xs font-semibold text-slate-700">
-                  Show booking QR code
-                </summary>
-                <div className="mt-3 flex flex-col items-start gap-2">
-                  <Image
-                    src={`/api/user/bookings/${booking.id}/qr`}
-                    alt={`QR code for booking ${booking.bookingNumber}`}
-                    width={160}
-                    height={160}
-                  />
-                  <p className="text-xs text-slate-500">
-                    Scan this at check-in with your booking number.
-                  </p>
-                </div>
-              </details>
             </div>
           ))
         )}

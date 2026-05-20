@@ -141,7 +141,7 @@ export function ExcursionForm({
       setError(
         (typeof errObj === "string" ? errObj : null) ??
           errObj?.formErrors?.[0] ??
-          Object.values(errObj?.fieldErrors ?? {})[0]?.[0] ??
+          (Object.values(errObj?.fieldErrors ?? {}) as string[][])[0]?.[0] ??
           "Save failed",
       );
       return;
