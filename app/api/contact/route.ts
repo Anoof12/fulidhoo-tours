@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { prisma } from "@/lib/prisma";
 
 const contactSchema = z.object({
   firstName: z.string().min(1, "First name is required").max(100),
@@ -18,6 +19,6 @@ export async function POST(request: Request) {
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.flatten().fieldErrors }, { status: 422 });
   }
-  // Message received — in production this would send an email or store in DB.
+  await prisma.contactMessage.create({ data: parsed.data });
   return NextResponse.json({ success: true });
 }
