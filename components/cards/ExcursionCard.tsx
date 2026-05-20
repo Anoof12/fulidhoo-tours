@@ -22,7 +22,7 @@ export function ExcursionCard({
     <article className="surface-card interactive-card overflow-hidden shadow-sm">
       <div className="relative h-52 w-full">
         <Image
-          src={excursion.image}
+          src={excursion.image || "/excursion-card-sample.png"}
           alt={excursion.title}
           fill
           className="object-cover"

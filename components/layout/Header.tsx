@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { LogOut } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
@@ -16,18 +17,15 @@ export async function Header() {
   return (
     <header className="sticky top-0 z-30 border-b border-black/10 bg-white/90 backdrop-blur-md">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-        <Link
-          href="/"
-          className="inline-flex flex-col leading-none text-emerald-900 transition-opacity hover:opacity-90"
-        >
-          <span className="font-display text-xl font-bold tracking-[0.16em] sm:text-2xl">
-            FULIDHOO
-          </span>
-          <span className="mt-1 inline-flex items-center gap-2 text-xs font-semibold tracking-[0.16em] text-emerald-700">
-            <span className="h-px w-6 bg-current" aria-hidden />
-            TOURS
-            <span className="h-px w-6 bg-current" aria-hidden />
-          </span>
+        <Link href="/" className="inline-flex items-center transition-opacity hover:opacity-90">
+          <Image
+            src="/logo.png"
+            alt="Fulidhoo Tours"
+            width={140}
+            height={56}
+            className="h-12 w-auto object-contain"
+            priority
+          />
         </Link>
 
         <nav className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.14em] sm:gap-5 sm:text-sm">
