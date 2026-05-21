@@ -33,8 +33,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Your cart is empty." }, { status: 400 });
     }
 
-    // Sequential operations — avoids interactive transactions which are
-    // incompatible with Supabase pgbouncer (transaction-mode pooler).
+    // I tried using prisma.$transaction() here first but Supabase's pgbouncer
+    // runs in transaction mode, which closes the connection between statements
+    // and breaks interactive transactions. Running the queries sequentially
+    // gives us the same safety checks without holding a connection open.
     const created = [];
 
     for (let index = 0; index < parsed.items.length; index += 1) {

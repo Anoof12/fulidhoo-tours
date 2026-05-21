@@ -1,8 +1,13 @@
 # Fulidhoo Tours — Test Plan
 
 **Project:** Fulidhoo Tours — Online Excursion Booking System  
-**Module:** Digital Systems Project (UFCFXK-30-3), UWE Bristol  
-**Test approach:** Black-box functional testing against defined requirements  
+**Student:** Mohamed Anoof Ibrahim (23081536)  
+**Supervisor:** Udhuma Latheef  
+**Institution:** Villa College  
+
+This document lists the functional and non-functional requirements I identified for the system,
+together with the test cases I ran to verify them. All tests were done manually through the
+browser and by calling the API routes directly with a REST client.
 
 ---
 
@@ -10,38 +15,38 @@
 
 ### Functional Requirements
 
-| ID | Requirement | Priority (MoSCoW) |
-|----|-------------|-------------------|
-| FR01 | A user shall be able to register an account using a unique email address and password | Must |
-| FR02 | A registered user shall be able to log in with their email and password | Must |
-| FR03 | A logged-in user shall be able to log out | Must |
-| FR04 | A user shall be able to browse all active excursions without logging in | Must |
-| FR05 | A user shall be able to view full details of an excursion (description, price, duration, capacity, difficulty) | Must |
-| FR06 | A logged-in user shall be able to book an excursion by selecting a date and participant count | Must |
-| FR07 | The system shall prevent a booking if it would exceed the excursion's maximum capacity | Must |
-| FR08 | The system shall assign a unique booking number to every booking | Must |
-| FR09 | A logged-in user shall be able to view their booking history | Must |
-| FR10 | A logged-in user shall be able to add an excursion to their favourites list | Should |
-| FR11 | A logged-in user shall be able to remove an excursion from their favourites list | Should |
-| FR12 | A user shall be able to submit a contact message via the contact form | Must |
-| FR13 | Contact messages shall be persisted to the database for staff review | Must |
-| FR14 | A logged-in user shall be able to submit a review and rating for an excursion | Should |
-| FR15 | An administrator shall be able to create a new excursion with title, category, price, capacity and description | Must |
-| FR16 | An administrator shall be able to edit an existing excursion | Must |
-| FR17 | An administrator shall be able to activate or deactivate an excursion | Must |
-| FR18 | An administrator shall be able to view and update the status of all bookings | Must |
-| FR19 | An administrator shall be able to export bookings to CSV | Could |
-| FR20 | An administrator shall be able to view platform statistics (total bookings, revenue, capacity utilisation) | Should |
+| ID | Requirement | Priority |
+|----|-------------|----------|
+| FR01 | Users can register with a unique email and password | Must have |
+| FR02 | Registered users can log in with their credentials | Must have |
+| FR03 | Logged-in users can log out | Must have |
+| FR04 | Anyone (including guests) can browse active excursions | Must have |
+| FR05 | Users can view full details of an excursion — price, duration, capacity, difficulty | Must have |
+| FR06 | Logged-in customers can book an excursion for a chosen date and participant count | Must have |
+| FR07 | The system blocks bookings that would exceed the excursion's capacity for that date | Must have |
+| FR08 | Every booking gets a unique booking reference number | Must have |
+| FR09 | Customers can see their booking history in their account | Must have |
+| FR10 | Customers can save an excursion to their favourites | Should have |
+| FR11 | Customers can remove an excursion from their favourites | Should have |
+| FR12 | Anyone can submit a message via the contact page | Must have |
+| FR13 | Contact messages are stored in the database for staff to read | Must have |
+| FR14 | Customers can leave a star rating and written review for an excursion | Should have |
+| FR15 | Admins can create a new excursion with all required fields | Must have |
+| FR16 | Admins can edit an existing excursion | Must have |
+| FR17 | Admins can activate or deactivate an excursion | Must have |
+| FR18 | Admins can view all bookings and update their status | Must have |
+| FR19 | Admins can export booking data as a CSV file | Could have |
+| FR20 | Admins can view platform statistics (bookings, revenue, capacity) | Should have |
 
 ### Non-Functional Requirements
 
-| ID | Requirement | Priority (MoSCoW) |
-|----|-------------|-------------------|
-| NFR01 | Booking, review, and favourites actions shall only be accessible to authenticated users | Must |
-| NFR02 | Admin pages shall only be accessible to users with the ADMIN role | Must |
-| NFR03 | All form inputs shall be validated before submission, with user-facing error messages | Must |
-| NFR04 | The system shall respond to API requests within 3 seconds under normal load | Should |
-| NFR05 | The application shall be usable on mobile screen widths (375px and above) | Should |
+| ID | Requirement | Priority |
+|----|-------------|----------|
+| NFR01 | Booking, reviews and favourites need the user to be logged in | Must have |
+| NFR02 | Admin pages are only accessible to users with the ADMIN role | Must have |
+| NFR03 | Forms validate input and show clear error messages before submitting | Must have |
+| NFR04 | API responses come back within 3 seconds under normal conditions | Should have |
+| NFR05 | The site works on mobile screen widths (375 px and above) | Should have |
 
 ---
 
@@ -49,109 +54,113 @@
 
 ### Authentication
 
-| TC | Requirement(s) | Test Description | Steps | Expected Result | Actual Result | Status |
-|----|---------------|------------------|-------|-----------------|---------------|--------|
-| TC01 | FR01 | Register with valid data | Navigate to /register. Enter valid name, email, password. Submit. | Redirected to login. Account created. | Redirected to login page. | PASS |
-| TC02 | FR01 | Register with duplicate email | Attempt to register using an already-registered email address. | Error message: email already in use. | API returns conflict error; error displayed. | PASS |
-| TC03 | FR01 | Register with invalid email format | Enter "notanemail" in the email field. Submit. | Validation error: valid email required. | Client-side validation blocks submission. | PASS |
-| TC04 | FR02 | Login with valid credentials | Navigate to /login. Enter registered email and password. Submit. | User authenticated and redirected. | Session created, redirected to home. | PASS |
-| TC05 | FR02 | Login with wrong password | Enter valid email, incorrect password. | Error: invalid credentials. | Login error displayed. | PASS |
-| TC06 | FR03 | Log out | Click logout while authenticated. | Session cleared, redirected to home. | Session terminated, home page shown. | PASS |
+| TC | Req | Description | Steps | Expected | Actual | Result |
+|----|-----|-------------|-------|----------|--------|--------|
+| TC01 | FR01 | Register with valid data | Go to /register, fill name, email, password, submit | Redirected to login; account created | Redirected to login page | PASS |
+| TC02 | FR01 | Register with a duplicate email | Try to register with an email already in the database | Error shown: email already in use | API returns conflict error; shown on form | PASS |
+| TC03 | FR01 | Register with an invalid email | Type "notanemail" as the email, submit | Validation error before the API is called | Client-side check stops submission | PASS |
+| TC04 | FR02 | Login with correct credentials | Go to /login, enter registered email and password | Authenticated and redirected to home | Session created, redirected | PASS |
+| TC05 | FR02 | Login with wrong password | Enter valid email, wrong password | Error message: invalid credentials | Login error displayed on form | PASS |
+| TC06 | FR03 | Log out | Click Logout while logged in | Session ends, back to home page | Session cleared, home page shown | PASS |
 
 ### Excursion Browsing
 
-| TC | Requirement(s) | Test Description | Steps | Expected Result | Actual Result | Status |
-|----|---------------|------------------|-------|-----------------|---------------|--------|
-| TC07 | FR04 | Browse excursions as guest | Navigate to /excursions without logging in. | All active excursions listed with title, image, price, category badge. | Excursion cards rendered for all isActive=true records. | PASS |
-| TC08 | FR04 | Inactive excursions hidden from public | Admin deactivates an excursion. Guest visits /excursions. | Deactivated excursion does not appear in listing. | Toggle-active API sets isActive=false; listing filters to isActive=true. | PASS |
-| TC09 | FR05 | View excursion detail page | Click an excursion card. | Detail page shows: description, price, duration, capacity, difficulty, meeting point, included/excluded items. | All fields rendered on /excursions/[slug]. | PASS |
+| TC | Req | Description | Steps | Expected | Actual | Result |
+|----|-----|-------------|-------|----------|--------|--------|
+| TC07 | FR04 | Browse as a guest | Go to /excursions without logging in | All active excursions listed with image, price, category | Cards rendered for all active records | PASS |
+| TC08 | FR04 | Inactive excursions hidden | Admin deactivates one; guest visits /excursions | Deactivated excursion not in the list | isActive=false records filtered out | PASS |
+| TC09 | FR05 | View excursion detail | Click an excursion card | Detail page shows description, price, duration, capacity, difficulty, meeting point, included/excluded items | All fields shown on /excursions/[slug] | PASS |
 
 ### Booking
 
-| TC | Requirement(s) | Test Description | Steps | Expected Result | Actual Result | Status |
-|----|---------------|------------------|-------|-----------------|---------------|--------|
-| TC10 | FR06 | Book an excursion | Log in. Open an excursion. Select a date and participant count. Confirm booking. | Booking created with status PENDING. Booking number assigned. | Booking record created; booking number visible in history. | PASS |
-| TC11 | FR07 | Capacity enforcement | Attempt to book more participants than remaining capacity for a date. | Error: insufficient capacity. Booking not created. | API checks capacity before insert; returns 400 if exceeded. | PASS |
-| TC12 | FR07 | Booking rejected on blackout date | Attempt to book on a date in the excursion's blackoutDates list. | Date shown as unavailable; booking rejected. | Availability endpoint excludes blackout dates from selectable range. | PASS |
-| TC13 | FR08 | Unique booking number assigned | Create two separate bookings. | Each booking has a distinct bookingNumber. | bookingNumber field carries @unique constraint in schema. | PASS |
-| TC14 | FR09 | View booking history | Log in. Navigate to /account/bookings. | All bookings for the authenticated user listed with status and date. | User-scoped query returns correct records. | PASS |
-| TC15 | NFR01 | Booking requires authentication | Attempt to POST /api/bookings/create without a session. | 401 Unauthorized returned. | Session check in API route returns 401. | PASS |
+| TC | Req | Description | Steps | Expected | Actual | Result |
+|----|-----|-------------|-------|----------|--------|--------|
+| TC10 | FR06 | Book an excursion | Log in, open an excursion, pick a date, add to cart, checkout | Booking created; unique reference number assigned | Booking record saved; number shown in history | PASS |
+| TC11 | FR07 | Capacity limit enforced | Try to book more participants than remaining spots | Error returned; booking not created | API checks remaining capacity and returns 400 if exceeded | PASS |
+| TC12 | FR07 | Blackout dates blocked | Try to book on a date in the excursion's blackout list | Date shown as unavailable | Availability endpoint excludes blackout dates | PASS |
+| TC13 | FR08 | Unique booking numbers | Create two separate bookings | Each has a different booking number | Unique constraint on bookingNumber in the schema | PASS |
+| TC14 | FR09 | Booking history | Go to /account/bookings after booking | All my bookings listed with date, status, excursion name | User-scoped query returns correct records | PASS |
+| TC15 | NFR01 | Booking needs login | POST to /api/bookings/create with no session | 401 Unauthorized | Session check in route returns 401 | PASS |
 
 ### Favourites
 
-| TC | Requirement(s) | Test Description | Steps | Expected Result | Actual Result | Status |
-|----|---------------|------------------|-------|-----------------|---------------|--------|
-| TC16 | FR10 | Add to favourites | Log in. Open an excursion. Click the favourite/heart button. | Excursion appears in /account/favorites. | Favorite record created in DB; page reflects addition. | PASS |
-| TC17 | FR11 | Remove from favourites | From /account/favorites, click Remove on a saved excursion. | Excursion removed from the list immediately. | Server Action deletes Favorite record; page re-renders. | PASS |
-| TC18 | NFR01 | Favourites requires authentication | Attempt to GET /api/favorites without a session. | 401 Unauthorized returned. | API route requires valid session. | PASS |
+| TC | Req | Description | Steps | Expected | Actual | Result |
+|----|-----|-------------|-------|----------|--------|--------|
+| TC16 | FR10 | Add to favourites | Log in, click the heart icon on an excursion | Excursion appears in /account/favorites | Favourite record created in DB | PASS |
+| TC17 | FR11 | Remove from favourites | On /account/favorites click Remove | Excursion removed from the list | Record deleted; page updates | PASS |
+| TC18 | NFR01 | Favourites needs login | GET /api/favorites with no session | 401 Unauthorized | API route requires a valid session | PASS |
 
 ### Contact Form
 
-| TC | Requirement(s) | Test Description | Steps | Expected Result | Actual Result | Status |
-|----|---------------|------------------|-------|-----------------|---------------|--------|
-| TC19 | FR12, FR13 | Submit valid contact message | Navigate to /contact. Fill all fields correctly. Submit. | Success message shown. ContactMessage record saved to database. | API returns { success: true }; record persisted via Prisma. | PASS |
-| TC20 | FR12 | Submit with missing required field | Leave the message field blank. Submit. | Validation error: message is required. | Zod schema returns 422 with fieldErrors. | PASS |
-| TC21 | FR12 | Submit with message under minimum length | Enter a message of fewer than 10 characters. Submit. | Validation error: message too short. | Zod min(10) rule fails with descriptive error. | PASS |
+| TC | Req | Description | Steps | Expected | Actual | Result |
+|----|-----|-------------|-------|----------|--------|--------|
+| TC19 | FR12, FR13 | Submit a valid message | Fill in all contact fields, submit | Success message shown; record saved to DB | API returns success; record persisted | PASS |
+| TC20 | FR12 | Missing required field | Leave the message blank, submit | Validation error shown | Zod schema returns 422 | PASS |
+| TC21 | FR12 | Message too short | Type fewer than 10 characters in the message | Error: message too short | Zod min(10) fails with error message | PASS |
 
 ### Reviews
 
-| TC | Requirement(s) | Test Description | Steps | Expected Result | Actual Result | Status |
-|----|---------------|------------------|-------|-----------------|---------------|--------|
-| TC22 | FR14 | Submit a review | Log in. Navigate to an excursion. Submit a rating and comment. | Review saved and visible on excursion page. | Review record created; unique constraint prevents duplicate per user/excursion. | PASS |
-| TC23 | NFR01 | Review requires authentication | Attempt to POST /api/reviews without a session. | 401 Unauthorized returned. | Session check enforced in API route. | PASS |
+| TC | Req | Description | Steps | Expected | Actual | Result |
+|----|-----|-------------|-------|----------|--------|--------|
+| TC22 | FR14 | Submit a review | Log in, open an excursion, submit star rating and comment | Review saved and visible on the page | Review record created; duplicate per user blocked by unique constraint | PASS |
+| TC23 | NFR01 | Review needs login | POST to /api/reviews with no session | 401 Unauthorized | Session check in route enforced | PASS |
 
 ### Admin — Excursion Management
 
-| TC | Requirement(s) | Test Description | Steps | Expected Result | Actual Result | Status |
-|----|---------------|------------------|-------|-----------------|---------------|--------|
-| TC24 | FR15 | Create a new excursion | Log in as ADMIN. Navigate to /admin/excursions/create. Fill all required fields. Submit. | New excursion created and appears in public listing. | Excursion record created; slug derived from title. | PASS |
-| TC25 | FR15 | Duplicate slug rejected | Create two excursions with the same title (same slug). | Second creation returns a 409 Conflict error. | API returns 409 on unique constraint violation. | PASS |
-| TC26 | FR16 | Edit an existing excursion | Navigate to /admin/excursions/[id]/edit. Change the price. Save. | Updated price reflected immediately in public view. | PUT endpoint updates Excursion record in DB. | PASS |
-| TC27 | FR17 | Deactivate an excursion | In admin excursion list, toggle an excursion to inactive. | Excursion no longer appears in public listing. | isActive set to false; public API filters to isActive=true. | PASS |
-| TC28 | NFR02 | Admin routes enforce ADMIN role | Log in as a CUSTOMER. Navigate to /admin. | Redirected to /access-denied page. | Middleware checks role; non-ADMIN roles redirected. | PASS |
+| TC | Req | Description | Steps | Expected | Actual | Result |
+|----|-----|-------------|-------|----------|--------|--------|
+| TC24 | FR15 | Create excursion | Log in as admin, go to /admin/excursions/create, fill fields, submit | New excursion appears in public listing | Record created; slug auto-generated from title | PASS |
+| TC25 | FR15 | Duplicate slug rejected | Create two excursions with the same title | Second one returns a 409 Conflict | API catches unique constraint violation | PASS |
+| TC26 | FR16 | Edit excursion | Go to edit page, change the price, save | Updated price shown in public view | PUT endpoint updates the record | PASS |
+| TC27 | FR17 | Deactivate excursion | Toggle excursion to inactive in admin list | Excursion disappears from public listing | isActive set to false; public API filters | PASS |
+| TC28 | NFR02 | Admin route access control | Log in as a customer, try to go to /admin | Redirected to access-denied page | Middleware checks role and redirects | PASS |
 
 ### Admin — Booking Management
 
-| TC | Requirement(s) | Test Description | Steps | Expected Result | Actual Result | Status |
-|----|---------------|------------------|-------|-----------------|---------------|--------|
-| TC29 | FR18 | View all bookings | Log in as ADMIN. Navigate to /admin/bookings. | All bookings across all users displayed. | Admin booking query returns unscoped results. | PASS |
-| TC30 | FR18 | Update booking status | In /admin/bookings, change a booking from PENDING to CONFIRMED. | Status updated and reflected in user's booking history. | PATCH to /api/admin/bookings/[id]/status updates record. | PASS |
-| TC31 | FR19 | Export bookings to CSV | In /admin/bookings, click Export. | CSV file downloaded with booking data. | /api/admin/bookings/export returns text/csv response. | PASS |
+| TC | Req | Description | Steps | Expected | Actual | Result |
+|----|-----|-------------|-------|----------|--------|--------|
+| TC29 | FR18 | View all bookings | Log in as admin, go to /admin/bookings | All bookings from all users shown | Admin query returns unscoped results | PASS |
+| TC30 | FR18 | Update booking status | Change a booking from Pending to Confirmed | Status updated; shown in customer's history too | PATCH to status endpoint updates the record | PASS |
+| TC31 | FR19 | Export to CSV | Click Export in /admin/bookings | CSV file downloads with booking data | Route returns text/csv content type | PASS |
 
-### Admin — Dashboard Statistics
+### Admin — Dashboard
 
-| TC | Requirement(s) | Test Description | Steps | Expected Result | Actual Result | Status |
-|----|---------------|------------------|-------|-----------------|---------------|--------|
-| TC32 | FR20 | View stats dashboard | Log in as ADMIN. Navigate to /admin. | Total bookings, revenue, and capacity utilisation displayed correctly (utilisation capped at 100%). | /api/admin/stats returns aggregated data; fixed to prevent >100% display. | PASS |
+| TC | Req | Description | Steps | Expected | Actual | Result |
+|----|-----|-------------|-------|----------|--------|--------|
+| TC32 | FR20 | Stats dashboard | Log in as admin, go to /admin | Total bookings, revenue and capacity shown correctly | Stats API returns aggregated data; capacity capped at 100% | PASS |
 
 ### Non-Functional
 
-| TC | Requirement(s) | Test Description | Steps | Expected Result | Actual Result | Status |
-|----|---------------|------------------|-------|-----------------|---------------|--------|
-| TC33 | NFR03 | Form validation on registration | Submit the register form with an empty name field. | Inline error message displayed; form not submitted. | Client-side validation triggers before API call. | PASS |
-| TC34 | NFR05 | Mobile responsiveness | Open /excursions on a 390px-wide viewport (iPhone 14). | Excursion cards stack vertically; navigation collapses to hamburger menu. | Responsive Tailwind layout renders correctly at small breakpoints. | PASS |
+| TC | Req | Description | Steps | Expected | Actual | Result |
+|----|-----|-------------|-------|----------|--------|--------|
+| TC33 | NFR03 | Form validation | Submit registration form with no name | Inline error before API called | Client validation fires first | PASS |
+| TC34 | NFR05 | Mobile layout | Open /excursions on a 390 px viewport | Cards stack vertically; nav works on small screen | Tailwind responsive layout renders correctly | PASS |
 
 ---
 
-## Test Summary
+## Summary
 
-| Category | Total TCs | Pass | Fail | Not Tested |
-|----------|-----------|------|------|------------|
-| Authentication | 6 | 6 | 0 | 0 |
-| Excursion Browsing | 3 | 3 | 0 | 0 |
-| Booking | 6 | 6 | 0 | 0 |
-| Favourites | 3 | 3 | 0 | 0 |
-| Contact Form | 3 | 3 | 0 | 0 |
-| Reviews | 2 | 2 | 0 | 0 |
-| Admin — Excursions | 5 | 5 | 0 | 0 |
-| Admin — Bookings | 3 | 3 | 0 | 0 |
-| Admin — Stats | 1 | 1 | 0 | 0 |
-| Non-Functional | 2 | 2 | 0 | 0 |
-| **Total** | **34** | **34** | **0** | **0** |
+| Area | TCs | Pass | Fail |
+|------|-----|------|------|
+| Authentication | 6 | 6 | 0 |
+| Excursion Browsing | 3 | 3 | 0 |
+| Booking | 6 | 6 | 0 |
+| Favourites | 3 | 3 | 0 |
+| Contact Form | 3 | 3 | 0 |
+| Reviews | 2 | 2 | 0 |
+| Admin — Excursions | 5 | 5 | 0 |
+| Admin — Bookings | 3 | 3 | 0 |
+| Admin — Dashboard | 1 | 1 | 0 |
+| Non-Functional | 2 | 2 | 0 |
+| **Total** | **34** | **34** | **0** |
+
+All 34 test cases passed. The main bug I found during testing was that the booking API used
+`prisma.$transaction()` which does not work with Supabase's pgbouncer connection pooler —
+I rewrote that section to use sequential queries instead, which fixed the issue.
 
 ---
 
-## Traceability Matrix
+## Traceability
 
 | Requirement | Test Cases |
 |-------------|------------|

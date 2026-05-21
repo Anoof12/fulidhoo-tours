@@ -5,6 +5,9 @@ import { NextAuthOptions, getServerSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 
+// Using JWT session strategy instead of database sessions because Supabase
+// runs pgbouncer in transaction mode — persistent DB session lookups on every
+// request would exhaust the connection pool under load.
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
@@ -20,6 +23,8 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
+        // Normalise email to lowercase so "User@email.com" and "user@email.com"
+        // are treated as the same account.
         const user = await prisma.user.findUnique({
           where: { email: credentials.email.toLowerCase() },
         });
@@ -43,6 +48,8 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    // Attach the user's role to the JWT so middleware can check it without
+    // hitting the database on every request.
     async jwt({ token, user }) {
       if (user) {
         token.role = (user as { role?: Role }).role ?? Role.CUSTOMER;
